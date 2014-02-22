@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:orientation="horizontal"
+              android:paddingTop="@dimen/small_margin_size">
+    <Button android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/left_setting_background"
+            android:layout_gravity="center_vertical"/>
+    <LinearLayout android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:orientation="vertical">
+        <RadioGroup android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_gravity="center_horizontal">
+            <RadioButton android:layout_width="wrap_content"
+                         android:layout_height="wrap_content"
+                         android:button="@null"
+                         android:background="@drawable/left_of_shirt_background"
+                         android:layout_marginLeft="@dimen/small_margin_size"
+                         android:layout_marginRight="@dimen/small_margin_size"/>
+            <RadioButton android:layout_width="wrap_content"
+                         android:layout_height="wrap_content"
+                         android:button="@null"
+                         android:background="@drawable/back_of_shirt_background"
+                         android:layout_marginLeft="@dimen/small_margin_size"
+                         android:layout_marginRight="@dimen/small_margin_size"/>
+            <RadioButton android:layout_width="wrap_content"
+                         android:layout_height="wrap_content"
+                         android:button="@null"
+                         android:background="@drawable/front_of_shirt_background"
+                         android:layout_marginLeft="@dimen/small_margin_size"
+                         android:layout_marginRight="@dimen/small_margin_size"/>
+            <RadioButton android:layout_width="wrap_content"
+                         android:layout_height="wrap_content"
+                         android:button="@null"
+                         android:background="@drawable/right_of_shirt_background"
+                         android:layout_marginLeft="@dimen/small_margin_size"
+                         android:layout_marginRight="@dimen/small_margin_size"/>
+        </RadioGroup>
+        <LinearLayout android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:layout_gravity="center_horizontal">
+            <Button android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/add_text_background"/>
+            <Button android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/add_image_background"/>
+            <Button android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/add_circle_background"/>
+            <Button android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/add_rectangle_background"/>
+        </LinearLayout>
+    </LinearLayout>
+    <Button android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/right_setting_background"
+            android:layout_gravity="center_vertical"/>
+</LinearLayout>

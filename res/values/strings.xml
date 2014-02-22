@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">TShirtDesigner</string>
+    <string name="total_price">total price:</string>
+    <string name="quantity">quantity: 0</string>
+    <string name="message_without_price">Change quantity to 1 or more t-shirts to see price</string>
 </resources>
