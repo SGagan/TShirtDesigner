@@ -4,4 +4,20 @@
     <string name="total_price">total price:</string>
     <string name="quantity">quantity: 0</string>
     <string name="message_without_price">Change quantity to 1 or more t-shirts to see price</string>
+    <string name="white">1,1,1</string>
+    <string name="gainsboro">0.863,0.863,0.863</string>
+    <string name="dark_gray">0.751,0.751,0.751</string>
+    <string name="black">0,0,0</string>
+    <string name="khaki">0.9412,0.902,0.51</string>
+    <string name="orange">1,0.647,0</string>
+    <string name="dark_orange">1,0.549,0</string>
+    <string name="red">1,0,0</string>
+    <string name="deep_pink">1,0.0784,0.5765</string>
+    <string name="dark_red">0.5451,0,0</string>
+    <string name="dark_magenta">0.5451,0,0.5451</string>
+    <string name="dodger_blue">0.1176,0.5647,1</string>
+    <string name="lime">0,1,0</string>
+    <string name="green">0,0.502,0</string>
+    <string name="medium_blue">0,0,0.804</string>
+    <string name="midnight_blue">0.098,0.098,0.439</string>
 </resources>
