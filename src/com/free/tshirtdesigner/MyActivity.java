@@ -1,18 +1,27 @@
 package com.free.tshirtdesigner;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.os.Environment;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.*;
 import com.free.tshirtdesigner.util.UtilImage;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+
 import static android.widget.RelativeLayout.LayoutParams;
 
-public class MyActivity extends Activity {
+public class MyActivity extends Activity
+{
+    private static final int CHECKOUT_CODE = 100;
     private ImageView ivShirt;
     private int home_x, home_y;
     private LayoutParams layoutParams;
@@ -24,32 +33,41 @@ public class MyActivity extends Activity {
     private ImageView ivResizeBottom;
     private ImageView ivResizeTop;
     RelativeLayout rlRootLayout;
+    private Button btnCheckout;
+    private Button btnLeftMenu;
 
-    private String colors="white";
+    private String colors = "white";
     private int tShirtDirection;
     private int _yDelta;
     private int _xDelta;
 
-
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
         setUpViewById();
         utilImage = new UtilImage();
         btGetImageGallery.setOnClickListener(onClickListener);
+        btnCheckout.setOnClickListener(onClickListener);
+        ivShirt = (ImageView) findViewById(R.id.ivShirt);
         ivShirt.setImageResource(R.drawable.tshirt_front_500);
-        ivShirt.setOnTouchListener(new View.OnTouchListener() {
+        ivShirt.setOnTouchListener(new View.OnTouchListener()
+        {
             @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
+            public boolean onTouch(View view, MotionEvent motionEvent)
+            {
                 return onTouchShirt(view, motionEvent);
             }
         });
 
         RadioGroup rgShirtViewType = (RadioGroup) findViewById(R.id.rgShirtViewType);
-        rgShirtViewType.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            public void onCheckedChanged(RadioGroup group, int checkedId) {
-                switch (group.getCheckedRadioButtonId()) {
+        rgShirtViewType.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener()
+        {
+            public void onCheckedChanged(RadioGroup group, int checkedId)
+            {
+                switch (group.getCheckedRadioButtonId())
+                {
                     case R.id.rbLeftSide:
                         showDirectionTShirt(R.drawable.tshirt_left_500);
                         break;
@@ -67,14 +85,17 @@ public class MyActivity extends Activity {
         });
 
         btSetting.setOnClickListener(onClickListener);
+        btnLeftMenu.setOnClickListener(onClickListener);
 
         RadioButton rbFront = (RadioButton) findViewById(R.id.rbFrontSide);
         rbFront.setChecked(true);
     }
 
-    private void setUpViewById() {
+    private void setUpViewById()
+    {
         shapeLayout = (RelativeLayout) getLayoutInflater().inflate(R.layout.shape_layout, null);
         rlRootLayout = (RelativeLayout) findViewById(R.id.main_activity_rlShowTShirt);
+        rlRootLayout.setDrawingCacheEnabled(true);
         ivShirt = (ImageView) findViewById(R.id.ivShirt);
         btSetting = (Button) findViewById(R.id.main_activity_btSetting);
         btGetImageGallery = (Button) findViewById(R.id.main_activity_btGetImageGallery);
@@ -84,12 +105,14 @@ public class MyActivity extends Activity {
         ivResizeTop.setTag("ResizeTop");
         ivResizeBottom = (ImageView) shapeLayout.findViewById(R.id.main_activity_ivResizeBottom);
         ivResizeBottom.setTag("ResizeBottom");
+        btnCheckout = (Button) findViewById(R.id.header_btCheckout);
+        btnLeftMenu = (Button) findViewById(R.id.btn_left_menu);
     }
 
     private void showDirectionTShirt(int tShirt_direction)
     {
         tShirtDirection = tShirt_direction;
-        if(!colors.equals("white"))
+        if (!colors.equals("white"))
         {
             Bitmap bitmap = BitmapFactory.decodeResource(getResources(), tShirt_direction);
             bitmap = utilImage.grayScaleImage(bitmap, colors);
@@ -101,22 +124,33 @@ public class MyActivity extends Activity {
         }
     }
 
-    View.OnClickListener onClickListener = new View.OnClickListener() {
+    View.OnClickListener onClickListener = new View.OnClickListener()
+    {
         @Override
-        public void onClick(View view) {
-            switch (view.getId()) {
+        public void onClick(View view)
+        {
+            switch (view.getId())
+            {
                 case R.id.main_activity_btSetting:
                     colors = getResources().getString(R.string.green);
-                    Bitmap bitmap = BitmapFactory.decodeResource(getResources(),tShirtDirection);
+                    Bitmap bitmap = BitmapFactory.decodeResource(getResources(), tShirtDirection);
                     bitmap = utilImage.grayScaleImage(bitmap, colors);
                     ivShirt.setImageBitmap(bitmap);
                     break;
                 case R.id.main_activity_btGetImageGallery:
                     addLayoutImage();
                     break;
+                case R.id.header_btCheckout:
+                    Intent intent = new Intent(MyActivity.this, CheckoutActivity.class);
+                    startActivityForResult(intent, CHECKOUT_CODE);
+                    break;
+                case R.id.btn_left_menu:
+                    saveTShirt();
+                    break;
             }
         }
     };
+
     private void addLayoutImage()
     {
         RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
@@ -171,9 +205,11 @@ public class MyActivity extends Activity {
         shapeLayout.invalidate();
     }
 
-    private boolean onTouchShirt(View view, MotionEvent motionEvent) {
+    private boolean onTouchShirt(View view, MotionEvent motionEvent)
+    {
         layoutParams = (LayoutParams) view.getLayoutParams();
-        switch (motionEvent.getAction()) {
+        switch (motionEvent.getAction())
+        {
             case MotionEvent.ACTION_DOWN:
                 home_x = (int) motionEvent.getRawX();
                 home_y = (int) motionEvent.getRawY();
@@ -196,4 +232,36 @@ public class MyActivity extends Activity {
         }
         return true;
     }
+
+    public void saveTShirt()
+    {
+        Bitmap bitmap = rlRootLayout.getDrawingCache();
+        File file, f = null;
+        if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED))
+        {
+            file = new File(Environment.getExternalStorageDirectory(), "Tshirt_cache");
+            if (!file.exists())
+            {
+                file.mkdirs();
+            }
+            f = new File(file.getAbsolutePath() + File.separator + "front" + ".png");
+        }
+        try
+        {
+            FileOutputStream outputStream = new FileOutputStream(f);
+            bitmap.compress(Bitmap.CompressFormat.PNG, 10, outputStream);
+            outputStream.close();
+            Toast.makeText(this, "SAVE T SHIRT DONE", Toast.LENGTH_LONG).show();
+        }
+        catch (FileNotFoundException e)
+        {
+            e.printStackTrace();
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+
+    }
+
 }

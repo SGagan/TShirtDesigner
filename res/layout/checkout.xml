@@ -1,126 +1,193 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:orientation="vertical"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent">
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
     <LinearLayout
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:weightSum="4"
+            android:layout_height="fill_parent"
+            android:background="@color/Gainsboro"
+            android:orientation="vertical"
             >
-        <TextView
+        <LinearLayout
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="3"
-                android:text="Email"/>
-        <EditText
+                android:layout_margin="10dp"
+                android:weightSum="4"
+                >
+            <TextView
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="3"
+                    android:textStyle="bold"
+                    android:textColor="@color/Black"
+                    android:text="Email"/>
+            <EditText
+                    android:id="@+id/ed_email"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:singleLine="true"
+                    android:hint="Email"/>
+
+        </LinearLayout>
+
+        <LinearLayout
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:hint="Email"/>
+                android:layout_margin="10dp"
+                android:weightSum="4">
+            <TextView
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:text="First Name"
+                    android:textStyle="bold"
+                    android:textColor="@color/Black"
+                    android:layout_weight="3"/>
+            <EditText
+                    android:id="@+id/ed_first_name"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="first name"
+                    android:singleLine="true"
+                    android:layout_weight="1"/>
+
+        </LinearLayout>
+        <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:weightSum="4">
+            <TextView
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Last Name"
+                    android:textColor="@color/Black"
+                    android:textStyle="bold"
+                    android:layout_weight="3"/>
+            <EditText
+                    android:id="@+id/ed_last_name"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="last name"
+                    android:singleLine="true"
+                    android:layout_weight="1"/>
+
+        </LinearLayout>
+        <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:weightSum="4">
+            <TextView
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Address 1"
+                    android:textColor="@color/Black"
+                    android:textStyle="bold"
+                    android:layout_weight="3"/>
+            <EditText
+                    android:id="@+id/ed_address_1"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="address 1"
+                    android:singleLine="true"
+                    android:layout_weight="1"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:weightSum="4">
+            <TextView
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Address 2"
+                    android:textColor="@color/Black"
+                    android:textStyle="bold"
+                    android:layout_weight="3"/>
+            <EditText
+                    android:id="@+id/ed_address_2"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="address 2"
+                    android:singleLine="true"
+                    android:layout_weight="1"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:weightSum="4">
+            <TextView
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Postcode"
+                    android:textColor="@color/Black"
+                    android:textStyle="bold"
+                    android:layout_weight="3"/>
+            <EditText
+                    android:id="@+id/ed_postcode"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="postcode"
+                    android:singleLine="true"
+                    android:layout_weight="1"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:weightSum="4">
+            <TextView
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Country"
+                    android:textColor="@color/Black"
+                    android:textStyle="bold"
+                    android:layout_weight="3"/>
+            <EditText
+                    android:id="@+id/ed_country"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="country"
+                    android:singleLine="true"
+                    android:layout_weight="1"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:weightSum="4">
+            <TextView
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="3"/>
+            <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1">
+                <ImageButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/btn_checkout_selector"
+                        android:id="@+id/ib_checkout"
+                        />
+
+            </LinearLayout>
+
+
+        </LinearLayout>
 
     </LinearLayout>
 
-    <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:weightSum="4">
-        <TextView
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:text="First Name"
-                android:layout_weight="3"/>
-        <EditText
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:hint="first name"
-                android:layout_weight="1"/>
 
-    </LinearLayout>
-    <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:weightSum="4">
-        <TextView
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:text="Last Name"
-                android:layout_weight="3"/>
-        <EditText
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:hint="last name"
-                android:layout_weight="1"/>
-
-    </LinearLayout>
-    <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:weightSum="4">
-        <TextView
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:text="Address 1"
-                android:layout_weight="3"/>
-        <EditText
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:hint="address 1"
-                android:layout_weight="1"/>
-
-    </LinearLayout>
-
-    <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:weightSum="4">
-        <TextView
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:text="Address 2"
-                android:layout_weight="3"/>
-        <EditText
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:hint="address 2"
-                android:layout_weight="1"/>
-
-    </LinearLayout>
-
-    <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:weightSum="4">
-        <TextView
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:text="Postcode"
-                android:layout_weight="3"/>
-        <EditText
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:hint="postcode"
-                android:layout_weight="1"/>
-
-    </LinearLayout>
-
-    <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:weightSum="4">
-        <TextView
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:text="Country"
-                android:layout_weight="3"/>
-        <EditText
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:hint="country"
-                android:layout_weight="1"/>
-
-    </LinearLayout>
-
-
-</LinearLayout>
+</ScrollView>
