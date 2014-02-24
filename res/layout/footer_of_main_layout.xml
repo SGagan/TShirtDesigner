@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
@@ -53,7 +52,9 @@
             <Button android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@drawable/add_text_background"/>
-            <Button android:layout_width="wrap_content"
+            <Button
+                    android:id="@+id/main_activity_btGetImageGallery"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@drawable/add_image_background"/>
             <Button android:layout_width="wrap_content"
@@ -64,7 +65,9 @@
                     android:background="@drawable/add_rectangle_background"/>
         </LinearLayout>
     </LinearLayout>
-    <Button android:layout_width="wrap_content"
+    <Button
+            android:id="@+id/main_activity_btSetting"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/right_setting_background"
             android:layout_gravity="center_vertical"/>

@@ -5,6 +5,7 @@
               android:layout_height="match_parent">
     <include layout="@layout/header_of_main_layout"/>
     <RelativeLayout
+            android:id="@+id/main_activity_rlShowTShirt"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/DarkGray">

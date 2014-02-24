@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@android:color/transparent">
+    <ImageView
+            android:id="@+id/main_activity_ivResizeTop"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:background="@drawable/selection_gizmo"/>
+    <ImageView
+            android:id="@+id/main_activity_ivImage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/main_activity_ivResizeTop"
+            android:layout_toRightOf="@id/main_activity_ivResizeTop"/>
+    <ImageView
+            android:id="@+id/main_activity_ivDeleteShape"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:background="@drawable/delete_gizmo"
+            android:layout_below="@id/main_activity_ivImage"
+            android:layout_toLeftOf="@id/main_activity_ivImage"/>
+    <ImageView
+            android:id="@+id/main_activity_ivResizeBottom"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:background="@drawable/selection_gizmo"
+            android:layout_below="@id/main_activity_ivImage"
+            android:layout_toRightOf="@id/main_activity_ivImage"/>
+</RelativeLayout>
