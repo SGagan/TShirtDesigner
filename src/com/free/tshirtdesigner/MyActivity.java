@@ -52,7 +52,7 @@ public class MyActivity extends Activity
         setUpViewById();
         btGetImageGallery.setOnClickListener(onClickListener);
         btnCheckout.setOnClickListener(onClickListener);
-        ivShirt = (ImageView) findViewById(R.id.ivShirt);
+
         ivShirt.setImageResource(R.drawable.tshirt_front_500);
         ivShirt.setOnTouchListener(new View.OnTouchListener()
         {
@@ -91,24 +91,10 @@ public class MyActivity extends Activity
 
         RadioButton rbFront = (RadioButton) findViewById(R.id.rbFrontSide);
         rbFront.setChecked(true);
-        findViewById(R.id.footer_control_btShowRightMenu).setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View view)
-            {
-                if (llRightMenu.getVisibility() == View.GONE)
-                {
-                    llRightMenu.setVisibility(View.VISIBLE);
-                }
-                else
-                {
-                    llRightMenu.setVisibility(View.GONE);
-                }
-            }
-        });
+
+        findViewById(R.id.footer_control_btShowRightMenu).setOnClickListener(onClickListener);
 
         //right menu
-        llRightMenu = (LinearLayout) findViewById(R.id.right_menu_llRoot);
         GridView gvColorChooser = (GridView) findViewById(R.id.right_menu_gvColorChooser);
         gvColorChooser.setAdapter(new GridViewAdapter(this, new ColorChooserInterface()
         {
@@ -139,6 +125,7 @@ public class MyActivity extends Activity
         ivResizeBottom.setTag("ResizeBottom");
         btnCheckout = (Button) findViewById(R.id.header_btCheckout);
         btnLeftMenu = (Button) findViewById(R.id.btn_left_menu);
+        llRightMenu = (LinearLayout) findViewById(R.id.right_menu_llRoot);
     }
 
     private void showDirectionTShirt(int tShirt_direction)
@@ -172,6 +159,16 @@ public class MyActivity extends Activity
                     break;
                 case R.id.btn_left_menu:
                     saveTShirt();
+                    break;
+                case R.id.footer_control_btShowRightMenu:
+                    if (llRightMenu.getVisibility() == View.GONE)
+                    {
+                        llRightMenu.setVisibility(View.VISIBLE);
+                    }
+                    else
+                    {
+                        llRightMenu.setVisibility(View.GONE);
+                    }
                     break;
             }
         }
@@ -248,7 +245,6 @@ public class MyActivity extends Activity
                 layoutParams.topMargin = (y_moved >= home_y) ? y_moved - home_y : home_y - y_moved;
 
                 view.setLayoutParams(layoutParams);
-
                 break;
             case MotionEvent.ACTION_UP:
                 layoutParams.leftMargin = 0;
