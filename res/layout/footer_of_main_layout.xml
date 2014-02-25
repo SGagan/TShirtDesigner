@@ -67,7 +67,7 @@
         </LinearLayout>
     </LinearLayout>
     <Button
-            android:id="@+id/main_activity_btSetting"
+            android:id="@+id/footer_control_btShowRightMenu"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/right_setting_background"

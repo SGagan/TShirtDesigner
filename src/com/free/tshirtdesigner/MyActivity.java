@@ -10,7 +10,10 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.*;
+import com.free.tshirtdesigner.action.ColorChooserInterface;
+import com.free.tshirtdesigner.adapter.GridViewAdapter;
 import com.free.tshirtdesigner.util.UtilImage;
+import com.free.tshirtdesigner.util.UtilResource;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -25,14 +28,12 @@ public class MyActivity extends Activity
     private ImageView ivShirt;
     private int home_x, home_y;
     private LayoutParams layoutParams;
-    private Button btSetting;
-    private UtilImage utilImage;
     private Button btGetImageGallery;
     private RelativeLayout shapeLayout;
     private ImageView ivImageShow;
     private ImageView ivResizeBottom;
     private ImageView ivResizeTop;
-    RelativeLayout rlRootLayout;
+    private RelativeLayout rlRootLayout;
     private Button btnCheckout;
     private Button btnLeftMenu;
 
@@ -41,13 +42,14 @@ public class MyActivity extends Activity
     private int _yDelta;
     private int _xDelta;
 
+    private LinearLayout llRightMenu;
+
     @Override
     public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
         setUpViewById();
-        utilImage = new UtilImage();
         btGetImageGallery.setOnClickListener(onClickListener);
         btnCheckout.setOnClickListener(onClickListener);
         ivShirt = (ImageView) findViewById(R.id.ivShirt);
@@ -61,6 +63,7 @@ public class MyActivity extends Activity
             }
         });
 
+        // footer controller
         RadioGroup rgShirtViewType = (RadioGroup) findViewById(R.id.rgShirtViewType);
         rgShirtViewType.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener()
         {
@@ -84,11 +87,41 @@ public class MyActivity extends Activity
             }
         });
 
-        btSetting.setOnClickListener(onClickListener);
         btnLeftMenu.setOnClickListener(onClickListener);
 
         RadioButton rbFront = (RadioButton) findViewById(R.id.rbFrontSide);
         rbFront.setChecked(true);
+        findViewById(R.id.footer_control_btShowRightMenu).setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                if (llRightMenu.getVisibility() == View.GONE)
+                {
+                    llRightMenu.setVisibility(View.VISIBLE);
+                }
+                else
+                {
+                    llRightMenu.setVisibility(View.GONE);
+                }
+            }
+        });
+
+        //right menu
+        llRightMenu = (LinearLayout) findViewById(R.id.right_menu_llRoot);
+        GridView gvColorChooser = (GridView) findViewById(R.id.right_menu_gvColorChooser);
+        gvColorChooser.setAdapter(new GridViewAdapter(this, new ColorChooserInterface()
+        {
+            @Override
+            public void itemClick(String colorNameSelected)
+            {
+                int colorSelectedId = UtilResource.getStringIdByName(getApplicationContext(), colorNameSelected);
+                colors = getResources().getString(colorSelectedId);
+                Bitmap bitmap = BitmapFactory.decodeResource(getResources(), tShirtDirection);
+                bitmap = UtilImage.grayScaleImage(bitmap, colors);
+                ivShirt.setImageBitmap(bitmap);
+            }
+        }));
     }
 
     private void setUpViewById()
@@ -97,7 +130,6 @@ public class MyActivity extends Activity
         rlRootLayout = (RelativeLayout) findViewById(R.id.main_activity_rlShowTShirt);
         rlRootLayout.setDrawingCacheEnabled(true);
         ivShirt = (ImageView) findViewById(R.id.ivShirt);
-        btSetting = (Button) findViewById(R.id.main_activity_btSetting);
         btGetImageGallery = (Button) findViewById(R.id.main_activity_btGetImageGallery);
         ivImageShow = (ImageView) shapeLayout.findViewById(R.id.main_activity_ivImage);
         ivImageShow.setTag("ImageShow");
@@ -115,7 +147,7 @@ public class MyActivity extends Activity
         if (!colors.equals("white"))
         {
             Bitmap bitmap = BitmapFactory.decodeResource(getResources(), tShirt_direction);
-            bitmap = utilImage.grayScaleImage(bitmap, colors);
+            bitmap = UtilImage.grayScaleImage(bitmap, colors);
             ivShirt.setImageBitmap(bitmap);
         }
         else
@@ -131,12 +163,6 @@ public class MyActivity extends Activity
         {
             switch (view.getId())
             {
-                case R.id.main_activity_btSetting:
-                    colors = getResources().getString(R.string.green);
-                    Bitmap bitmap = BitmapFactory.decodeResource(getResources(), tShirtDirection);
-                    bitmap = utilImage.grayScaleImage(bitmap, colors);
-                    ivShirt.setImageBitmap(bitmap);
-                    break;
                 case R.id.main_activity_btGetImageGallery:
                     addLayoutImage();
                     break;

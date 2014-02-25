@@ -2,16 +2,18 @@ package com.free.tshirtdesigner.util;
 
 import android.graphics.Bitmap;
 import android.graphics.Color;
-
-import java.util.List;
+import android.graphics.drawable.BitmapDrawable;
+import android.widget.ImageView;
 
 /**
  * User: RuaTre_IT
  * Date: 2/23/14
  * Time: 3:34 PM
  */
-public class UtilImage {
-    public Bitmap grayScaleImage(Bitmap src,String colorSource) {
+public class UtilImage
+{
+    public static Bitmap grayScaleImage(Bitmap src, String colorSource)
+    {
         // constant factors
         String[] colors = colorSource.split(",");
         final double GS_RED = Double.parseDouble(colors[0]);
@@ -26,15 +28,17 @@ public class UtilImage {
         int pixel;
 
         // scan through all pixels
-        for(int x = 0; x < width; ++x) {
-            for(int y = 0; y < height; ++y) {
+        for (int x = 0; x < width; ++x)
+        {
+            for (int y = 0; y < height; ++y)
+            {
                 // get pixel color
                 pixel = src.getPixel(x, y);
                 // apply filtering on each channel R, G, B
                 A = Color.alpha(pixel);
-                R = (int)(Color.red(pixel) * GS_RED);
-                G = (int)(Color.green(pixel) * GS_GREEN);
-                B = (int)(Color.blue(pixel) * GS_BLUE);
+                R = (int) (Color.red(pixel) * GS_RED);
+                G = (int) (Color.green(pixel) * GS_GREEN);
+                B = (int) (Color.blue(pixel) * GS_BLUE);
                 // set new color pixel to output bitmap
                 bmOut.setPixel(x, y, Color.argb(A, R, G, B));
             }
@@ -42,5 +46,10 @@ public class UtilImage {
 
         // return final image
         return bmOut;
+    }
+
+    public static Bitmap getCurrentBitmap(ImageView imageView)
+    {
+        return ((BitmapDrawable) imageView.getDrawable()).getBitmap();
     }
 }

@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:id="@+id/right_menu_llRoot"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:layout_marginLeft="120dp"
+              android:background="#000000"
+              android:paddingLeft="3dp"
+              android:layout_gravity="bottom"
+              android:visibility="gone">
+    <TextView android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:text="t-shirt color"
+              android:textStyle="bold"
+              android:textColor="#FFFFFF"
+              android:textSize="@dimen/text_default"
+              android:gravity="center_horizontal"
+            />
+    <GridView android:id="@+id/right_menu_gvColorChooser"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:numColumns="4"
+              android:columnWidth="60dp"
+              android:horizontalSpacing="3dp"
+              android:verticalSpacing="3dp"
+              android:gravity="center"
+              android:stretchMode="columnWidth"/>
+
+    <LinearLayout android:id="@+id/menu_right_llDesignLayer"
+                  android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:orientation="vertical">
+        <TextView android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:text="design layers:"
+                  android:textStyle="bold"
+                  android:textColor="#FFFFFF"
+                  android:textSize="@dimen/text_default"
+                  android:gravity="center_horizontal"
+                />
+        <ListView android:layout_width="match_parent"
+                  android:layout_height="wrap_content"/>
+    </LinearLayout>
+    <LinearLayout android:id="@+id/menu_right_llControl"
+                  android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:orientation="vertical">
+        <TextView android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:text="My Design 1"
+                  android:textStyle="bold"
+                  android:textColor="#FFFFFF"
+                  android:textSize="@dimen/text_default"
+                  android:gravity="center_horizontal"
+                />
+        <LinearLayout android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                >
+            <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/right_menu_new_design_bg"/>
+            <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/right_menu_open_design_bg"/>
+
+            <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/right_menu_rename_design_bg"/>
+            <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/right_menu_delete_design_bg"/>
+            <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/right_menu_send_email_design_bg"/>
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>
