@@ -54,14 +54,14 @@ public class MyActivity extends Activity
         btnCheckout.setOnClickListener(onClickListener);
 
         ivShirt.setImageResource(R.drawable.tshirt_front_500);
-        ivShirt.setOnTouchListener(new View.OnTouchListener()
-        {
-            @Override
-            public boolean onTouch(View view, MotionEvent motionEvent)
-            {
-                return onTouchShirt(view, motionEvent);
-            }
-        });
+//        ivShirt.setOnTouchListener(new View.OnTouchListener()
+//        {
+//            @Override
+//            public boolean onTouch(View view, MotionEvent motionEvent)
+//            {
+//                return onTouchShirt(view, motionEvent);
+//            }
+//        });
 
         // footer controller
         RadioGroup rgShirtViewType = (RadioGroup) findViewById(R.id.rgShirtViewType);

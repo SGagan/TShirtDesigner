@@ -16,10 +16,15 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"/>
-        <include layout="@layout/menu_right"/>
-    </RelativeLayout>
-    <include android:id="@+id/layout_footer"
-             layout="@layout/footer_of_main_layout"
-             android:layout_alignParentBottom="true"/>
+        <com.free.tshirtdesigner.TouchExampleView
+                android:layout_width="match_parent"
+                android:layout_height="335dp"/>
+
+<include layout="@layout/menu_right"/>
+
+</RelativeLayout>
+<include android:id="@+id/layout_footer"
+     layout="@layout/footer_of_main_layout"
+     android:layout_alignParentBottom="true"/>
 </LinearLayout>
 
