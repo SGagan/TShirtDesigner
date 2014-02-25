@@ -251,8 +251,8 @@ public class MyActivity extends Activity
 
                 break;
             case MotionEvent.ACTION_UP:
-                layoutParams.leftMargin = 30;
-                layoutParams.topMargin = 30;
+                layoutParams.leftMargin = 0;
+                layoutParams.topMargin = 0;
                 view.setLayoutParams(layoutParams);
                 break;
         }
