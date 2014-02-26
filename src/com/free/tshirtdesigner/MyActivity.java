@@ -11,7 +11,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.*;
 import com.free.tshirtdesigner.action.InputActionListener;
+import com.free.tshirtdesigner.adapter.LayerArrayAdapter;
 import com.free.tshirtdesigner.dialog.InputDialog;
+import com.free.tshirtdesigner.model.LayerModel;
+import com.free.tshirtdesigner.util.setting.ConstantValue;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static android.widget.RelativeLayout.LayoutParams;
 
@@ -40,6 +46,10 @@ public class MyActivity extends FragmentActivity
 
 
     TShirtFragment tShirtFragment;
+    private int countLayer = 0;
+    private ListView lvListLayer;
+    private int currentLayer = -1;
+    private List<LayerModel> layerModels = new ArrayList<LayerModel>();
 
     @Override
     public void onCreate(Bundle savedInstanceState)
@@ -76,6 +86,7 @@ public class MyActivity extends FragmentActivity
 
         RadioButton rbFront = (RadioButton) findViewById(R.id.rbFrontSide);
         rbFront.setChecked(true);
+
         findViewById(R.id.footer_control_btShowRightMenu).setOnClickListener(new View.OnClickListener()
         {
             @Override
@@ -83,6 +94,27 @@ public class MyActivity extends FragmentActivity
             {
                 if (tShirtFragment.getLlRightMenu().getVisibility() == View.GONE)
                 {
+                    LayerModel[] layers = new LayerModel[layerModels.size()];
+                    layers = layerModels.toArray(layers);
+                    LayerArrayAdapter adapter = new LayerArrayAdapter(MyActivity.this, R.id.menu_right_lvListLayer, layers);
+                    lvListLayer = tShirtFragment.getLvListLayer();
+                    lvListLayer.setAdapter(adapter);
+                    lvListLayer.setOnItemClickListener(new AdapterView.OnItemClickListener()
+                    {
+                        @Override
+                        public void onItemClick(AdapterView<?> adapterView, View view, int i, long l)
+                        {
+                            Toast.makeText(getApplicationContext(), "item " + i, Toast.LENGTH_SHORT).show();
+                            layerModels.get(i).getViewZoomer().setEnabled(true);
+                            currentLayer = i;
+                            tShirtFragment.getLlRightMenu().setVisibility(View.GONE);
+                        }
+                    });
+                    for (LayerModel layer : layerModels)
+                    {
+                        layer.getViewZoomer().setEnabled(false);
+                    }
+                    tShirtFragment.getRlRootLayout().bringToFront();
                     tShirtFragment.getLlRightMenu().setVisibility(View.VISIBLE);
                 }
                 else
@@ -124,10 +156,11 @@ public class MyActivity extends FragmentActivity
             switch (view.getId())
             {
                 case R.id.footer_control_btAddImage:
-                    Bitmap icon = BitmapFactory.decodeResource(getResources(),
-                            R.drawable.bt_red_popup_small);
-                    tShirtFragment.getRlRootLayout().addView(
-                            new ViewZoomer(getApplicationContext(), icon));
+                    Bitmap icon = BitmapFactory.decodeResource(getResources(), R.drawable.bt_red_popup_small);
+                    ViewZoomer viewZoomer = new ViewZoomer(getApplicationContext(), icon);
+                    tShirtFragment.getRlRootLayout().addView(viewZoomer);
+                    String name = getResources().getResourceEntryName(R.drawable.bt_red_popup_small);
+                    layerModels.add(new LayerModel(countLayer++, ConstantValue.IMAGE_ITEM_TYPE, name, viewZoomer));
                     break;
                 case R.id.header_btCheckout:
                     Intent intent = new Intent(MyActivity.this, CheckoutActivity.class);
@@ -141,8 +174,9 @@ public class MyActivity extends FragmentActivity
                         @Override
                         public void onSubmit(String result)
                         {
-                            tShirtFragment.getRlRootLayout().addView(
-                                    new ViewZoomer(getApplicationContext(), result));
+                            ViewZoomer viewZoomer = new ViewZoomer(getApplicationContext(), result);
+                            tShirtFragment.getRlRootLayout().addView(viewZoomer);
+                            layerModels.add(new LayerModel(countLayer++, ConstantValue.TEXT_ITEM_TYPE, result, viewZoomer));
                         }
                     }).show(getFragmentManager(), "InputDialog");
                     break;

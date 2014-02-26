@@ -16,4 +16,7 @@ public class ConstantValue
     public static final String LINDEN_HILL = "linden_hill.otf";
     public static final String ORBITRON_BOLD = "orbitron_bold.tff";
     public static final String OSTRICH_ROUNDED = "ostrich_rounded.tff";
+
+    public static final int TEXT_ITEM_TYPE = 0;
+    public static final int IMAGE_ITEM_TYPE = 1;
 }

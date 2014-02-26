@@ -34,13 +34,13 @@ public class TShirtFragment extends Fragment
     GridView gvColorChooser;
     String colors = "white";
     int tShirtDirection;
+    private ListView lvListLayer;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
-        View view = inflater.inflate(R.layout.shirt_layout,container, false);
-        rlRootLayout = (RelativeLayout) view.findViewById(R.id.main_activity_rlShowTShirt);
-        ivShirt = (ImageView) view.findViewById(R.id.ivShirt);
+        rlRootLayout = (RelativeLayout) inflater.inflate(R.layout.shirt_layout, container, false);
+        ivShirt = (ImageView) rlRootLayout.findViewById(R.id.ivShirt);
         ivShirt.setImageResource(R.drawable.tshirt_front_500);
         ivShirt.setOnTouchListener(new View.OnTouchListener()
         {
@@ -53,8 +53,8 @@ public class TShirtFragment extends Fragment
         });
 
         //right menu
-        llRightMenu = (LinearLayout) view.findViewById(R.id.right_menu_llRoot);
-        gvColorChooser = (GridView) view.findViewById(R.id.right_menu_gvColorChooser);
+        llRightMenu = (LinearLayout) rlRootLayout.findViewById(R.id.right_menu_llRoot);
+        gvColorChooser = (GridView) rlRootLayout.findViewById(R.id.right_menu_gvColorChooser);
 
         gvColorChooser.setAdapter(new GridViewAdapter(getActivity(), new ColorChooserInterface()
         {
@@ -69,10 +69,12 @@ public class TShirtFragment extends Fragment
             }
         }));
 
+        lvListLayer = (ListView) rlRootLayout.findViewById(R.id.menu_right_lvListLayer);
+
         showDirectionTShirt();
 
 
-        return view;
+        return rlRootLayout;
     }
 
     public RelativeLayout getRlRootLayout()
@@ -137,7 +139,10 @@ public class TShirtFragment extends Fragment
         {
             e.printStackTrace();
         }
-
     }
 
+    public ListView getLvListLayer()
+    {
+        return lvListLayer;
+    }
 }

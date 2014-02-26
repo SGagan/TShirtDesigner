@@ -69,8 +69,12 @@ public class ViewZoomer extends View
     @Override
     public boolean onTouchEvent(MotionEvent ev)
     {
-        mDetector.onTouchEvent(ev);
-        return true;
+        if (isEnabled())
+        {
+            mDetector.onTouchEvent(ev);
+            return true;
+        }
+        return false;
     }
 
     @Override

@@ -4,11 +4,10 @@
               android:id="@+id/right_menu_llRoot"
               android:orientation="vertical"
               android:layout_width="match_parent"
-              android:layout_height="wrap_content"
+              android:layout_height="match_parent"
               android:layout_marginLeft="120dp"
               android:background="#000000"
               android:paddingLeft="3dp"
-              android:layout_gravity="bottom"
               android:visibility="gone">
     <TextView android:layout_width="match_parent"
               android:layout_height="wrap_content"
@@ -40,7 +39,8 @@
                   android:textSize="@dimen/text_default"
                   android:gravity="center_horizontal"
                 />
-        <ListView android:layout_width="match_parent"
+        <ListView android:id="@+id/menu_right_lvListLayer"
+                  android:layout_width="match_parent"
                   android:layout_height="wrap_content"/>
     </LinearLayout>
     <LinearLayout android:id="@+id/menu_right_llControl"
