@@ -1,26 +1,13 @@
 package com.free.tshirtdesigner;
 
-import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.os.Environment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
-import android.view.MotionEvent;
-import android.view.View;
-import android.view.ViewGroup;
+import android.view.*;
 import android.widget.*;
-import com.free.tshirtdesigner.action.ColorChooserInterface;
-import com.free.tshirtdesigner.adapter.GridViewAdapter;
-import com.free.tshirtdesigner.util.UtilImage;
-import com.free.tshirtdesigner.util.UtilResource;
-
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import com.free.tshirtdesigner.action.InputActionListener;
+import com.free.tshirtdesigner.dialog.InputDialog;
 
 import static android.widget.RelativeLayout.LayoutParams;
 
@@ -34,9 +21,10 @@ public class MyActivity extends FragmentActivity
     private ImageView ivImageShow;
     private ImageView ivResizeBottom;
     private ImageView ivResizeTop;
-//    private RelativeLayout rlRootLayout;
+    //    private RelativeLayout rlRootLayout;
     private Button btnCheckout;
     private Button btnLeftMenu;
+    private Button btAddText;
 
     private int tShirtDirection;
     private int _yDelta;
@@ -47,7 +35,6 @@ public class MyActivity extends FragmentActivity
     public static final String BACK_TAG = "BACK";
 
 
-
     TShirtFragment tShirtFragment;
 
     @Override
@@ -56,8 +43,7 @@ public class MyActivity extends FragmentActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
         setUpViewById();
-        btGetImageGallery.setOnClickListener(onClickListener);
-        btnCheckout.setOnClickListener(onClickListener);
+        setActionListener();
 
         createOrUpdateFragment(FRONT_TAG);
         // footer controller
@@ -69,7 +55,7 @@ public class MyActivity extends FragmentActivity
                 switch (group.getCheckedRadioButtonId())
                 {
                     case R.id.rbLeftSide:
-                          createOrUpdateFragment(LEFT_TAG);
+                        createOrUpdateFragment(LEFT_TAG);
                         break;
                     case R.id.rbBackSide:
                         createOrUpdateFragment(BACK_TAG);
@@ -83,8 +69,6 @@ public class MyActivity extends FragmentActivity
                 }
             }
         });
-
-        btnLeftMenu.setOnClickListener(onClickListener);
 
         RadioButton rbFront = (RadioButton) findViewById(R.id.rbFrontSide);
         rbFront.setChecked(true);
@@ -103,10 +87,6 @@ public class MyActivity extends FragmentActivity
                 }
             }
         });
-
-
-
-
     }
 
     private void setUpViewById()
@@ -121,8 +101,16 @@ public class MyActivity extends FragmentActivity
         ivResizeBottom.setTag("ResizeBottom");
         btnCheckout = (Button) findViewById(R.id.header_btCheckout);
         btnLeftMenu = (Button) findViewById(R.id.btn_left_menu);
+        btAddText = (Button) findViewById(R.id.footer_control_btAddText);
     }
 
+    private void setActionListener()
+    {
+        btGetImageGallery.setOnClickListener(onClickListener);
+        btnCheckout.setOnClickListener(onClickListener);
+        btnLeftMenu.setOnClickListener(onClickListener);
+        btAddText.setOnClickListener(onClickListener);
+    }
 
     View.OnClickListener onClickListener = new View.OnClickListener()
     {
@@ -139,6 +127,17 @@ public class MyActivity extends FragmentActivity
                     startActivityForResult(intent, CHECKOUT_CODE);
                     break;
                 case R.id.btn_left_menu:
+                    break;
+                case R.id.footer_control_btAddText:
+                    new InputDialog(new InputActionListener()
+                    {
+                        @Override
+                        public void onSubmit(String result)
+                        {
+                            tShirtFragment.getRlRootLayout().addView(
+                                    new TouchExampleView(getApplicationContext(), result));
+                        }
+                    }).show(getFragmentManager(), "InputDialog");
                     break;
             }
         }
@@ -225,8 +224,6 @@ public class MyActivity extends FragmentActivity
         return true;
     }
 
-
-
     public void createOrUpdateFragment(String fragmentTag)
     {
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
@@ -235,12 +232,12 @@ public class MyActivity extends FragmentActivity
         {
             createNewFragment(fragmentTag);
             tShirtFragment.setRetainInstance(true);
-            ft.replace(R.id.embed_shirt,tShirtFragment,fragmentTag).addToBackStack(null);
+            ft.replace(R.id.embed_shirt, tShirtFragment, fragmentTag).addToBackStack(null);
             ft.commit();
         }
         else
         {
-            ft.replace(R.id.embed_shirt,tShirtFragment).addToBackStack(null);
+            ft.replace(R.id.embed_shirt, tShirtFragment).addToBackStack(null);
             ft.commit();
         }
 

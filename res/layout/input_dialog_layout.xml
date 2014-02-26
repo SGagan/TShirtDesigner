@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:padding="10dp"
+              android:layout_margin="30dp"
+              android:layout_gravity="center_horizontal"
+              android:background="@drawable/background_layout_black">
+    <TextView
+            android:id="@+id/input_dialog_tvTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="ENTER TEXT"
+            android:textStyle="bold"
+            android:textColor="#FFFFFF"
+            android:gravity="center_horizontal"/>
+    <LinearLayout
+            android:id="@+id/input_dialog_llContent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/background_layout_white"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:descendantFocusability="beforeDescendants"
+            android:focusableInTouchMode="true">
+        <TextView android:id="@+id/input_item_tvTitle"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:textStyle="bold"
+                  android:textColor="#000000"
+                  android:text="Your text:"
+                  android:padding="5dp"
+                  android:layout_gravity="center_vertical"/>
+        <EditText android:id="@+id/input_item_etContent"
+                  android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:textColor="#000000"
+                  android:padding="5dp"
+                  android:background="@null"
+                  android:maxLines="1"
+                  android:maxLength="20"
+                  android:layout_gravity="center_vertical"/>
+    </LinearLayout>
+
+    <RelativeLayout android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+        <Button
+                android:id="@+id/input_dialog_btButton1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Cancel"
+                style="@style/TextButton"
+                android:background="@drawable/bt_dark_grey_popup_small"
+                />
+        <Button
+                android:id="@+id/input_dialog_btButton2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:text="OK"
+                style="@style/TextButton"
+                android:background="@drawable/bt_red_popup_small"
+                />
+    </RelativeLayout>
+</LinearLayout>
