@@ -6,6 +6,8 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Environment;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentTransaction;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,10 +24,9 @@ import java.io.IOException;
 
 import static android.widget.RelativeLayout.LayoutParams;
 
-public class MyActivity extends Activity
+public class MyActivity extends FragmentActivity
 {
     private static final int CHECKOUT_CODE = 100;
-    private ImageView ivShirt;
     private int home_x, home_y;
     private LayoutParams layoutParams;
     private Button btGetImageGallery;
@@ -33,16 +34,21 @@ public class MyActivity extends Activity
     private ImageView ivImageShow;
     private ImageView ivResizeBottom;
     private ImageView ivResizeTop;
-    private RelativeLayout rlRootLayout;
+//    private RelativeLayout rlRootLayout;
     private Button btnCheckout;
     private Button btnLeftMenu;
 
-    private String colors = "white";
     private int tShirtDirection;
     private int _yDelta;
     private int _xDelta;
+    public static final String FRONT_TAG = "FRONT";
+    public static final String LEFT_TAG = "LEFT";
+    public static final String RIGHT_TAG = "RIGHT";
+    public static final String BACK_TAG = "BACK";
 
-    private LinearLayout llRightMenu;
+
+
+    TShirtFragment tShirtFragment;
 
     @Override
     public void onCreate(Bundle savedInstanceState)
@@ -53,16 +59,7 @@ public class MyActivity extends Activity
         btGetImageGallery.setOnClickListener(onClickListener);
         btnCheckout.setOnClickListener(onClickListener);
 
-        ivShirt.setImageResource(R.drawable.tshirt_front_500);
-//        ivShirt.setOnTouchListener(new View.OnTouchListener()
-//        {
-//            @Override
-//            public boolean onTouch(View view, MotionEvent motionEvent)
-//            {
-//                return onTouchShirt(view, motionEvent);
-//            }
-//        });
-
+        createOrUpdateFragment(FRONT_TAG);
         // footer controller
         RadioGroup rgShirtViewType = (RadioGroup) findViewById(R.id.rgShirtViewType);
         rgShirtViewType.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener()
@@ -72,16 +69,16 @@ public class MyActivity extends Activity
                 switch (group.getCheckedRadioButtonId())
                 {
                     case R.id.rbLeftSide:
-                        showDirectionTShirt(R.drawable.tshirt_left_500);
+                          createOrUpdateFragment(LEFT_TAG);
                         break;
                     case R.id.rbBackSide:
-                        showDirectionTShirt(R.drawable.tshirt_back_500);
+                        createOrUpdateFragment(BACK_TAG);
                         break;
                     case R.id.rbFrontSide:
-                        showDirectionTShirt(R.drawable.tshirt_front_500);
+                        createOrUpdateFragment(FRONT_TAG);
                         break;
                     case R.id.rbRightSide:
-                        showDirectionTShirt(R.drawable.tshirt_right_500);
+                        createOrUpdateFragment(RIGHT_TAG);
                         break;
                 }
             }
@@ -91,31 +88,30 @@ public class MyActivity extends Activity
 
         RadioButton rbFront = (RadioButton) findViewById(R.id.rbFrontSide);
         rbFront.setChecked(true);
-
-        findViewById(R.id.footer_control_btShowRightMenu).setOnClickListener(onClickListener);
-
-        //right menu
-        GridView gvColorChooser = (GridView) findViewById(R.id.right_menu_gvColorChooser);
-        gvColorChooser.setAdapter(new GridViewAdapter(this, new ColorChooserInterface()
+        findViewById(R.id.footer_control_btShowRightMenu).setOnClickListener(new View.OnClickListener()
         {
             @Override
-            public void itemClick(String colorNameSelected)
+            public void onClick(View view)
             {
-                int colorSelectedId = UtilResource.getStringIdByName(getApplicationContext(), colorNameSelected);
-                colors = getResources().getString(colorSelectedId);
-                Bitmap bitmap = BitmapFactory.decodeResource(getResources(), tShirtDirection);
-                bitmap = UtilImage.grayScaleImage(bitmap, colors);
-                ivShirt.setImageBitmap(bitmap);
+                if (tShirtFragment.getLlRightMenu().getVisibility() == View.GONE)
+                {
+                    tShirtFragment.getLlRightMenu().setVisibility(View.VISIBLE);
+                }
+                else
+                {
+                    tShirtFragment.getLlRightMenu().setVisibility(View.GONE);
+                }
             }
-        }));
+        });
+
+
+
+
     }
 
     private void setUpViewById()
     {
         shapeLayout = (RelativeLayout) getLayoutInflater().inflate(R.layout.shape_layout, null);
-        rlRootLayout = (RelativeLayout) findViewById(R.id.main_activity_rlShowTShirt);
-        rlRootLayout.setDrawingCacheEnabled(true);
-        ivShirt = (ImageView) findViewById(R.id.ivShirt);
         btGetImageGallery = (Button) findViewById(R.id.main_activity_btGetImageGallery);
         ivImageShow = (ImageView) shapeLayout.findViewById(R.id.main_activity_ivImage);
         ivImageShow.setTag("ImageShow");
@@ -125,23 +121,8 @@ public class MyActivity extends Activity
         ivResizeBottom.setTag("ResizeBottom");
         btnCheckout = (Button) findViewById(R.id.header_btCheckout);
         btnLeftMenu = (Button) findViewById(R.id.btn_left_menu);
-        llRightMenu = (LinearLayout) findViewById(R.id.right_menu_llRoot);
     }
 
-    private void showDirectionTShirt(int tShirt_direction)
-    {
-        tShirtDirection = tShirt_direction;
-        if (!colors.equals("white"))
-        {
-            Bitmap bitmap = BitmapFactory.decodeResource(getResources(), tShirt_direction);
-            bitmap = UtilImage.grayScaleImage(bitmap, colors);
-            ivShirt.setImageBitmap(bitmap);
-        }
-        else
-        {
-            ivShirt.setImageResource(tShirt_direction);
-        }
-    }
 
     View.OnClickListener onClickListener = new View.OnClickListener()
     {
@@ -158,17 +139,6 @@ public class MyActivity extends Activity
                     startActivityForResult(intent, CHECKOUT_CODE);
                     break;
                 case R.id.btn_left_menu:
-                    saveTShirt();
-                    break;
-                case R.id.footer_control_btShowRightMenu:
-                    if (llRightMenu.getVisibility() == View.GONE)
-                    {
-                        llRightMenu.setVisibility(View.VISIBLE);
-                    }
-                    else
-                    {
-                        llRightMenu.setVisibility(View.GONE);
-                    }
                     break;
             }
         }
@@ -183,7 +153,7 @@ public class MyActivity extends Activity
         ivImageShow.setOnTouchListener(onTouchListenerImage);
         ivResizeBottom.setOnTouchListener(onTouchListenerImage);
         ivResizeTop.setOnTouchListener(onTouchListenerImage);
-        rlRootLayout.addView(shapeLayout);
+        tShirtFragment.getRlRootLayout().addView(shapeLayout);
     }
 
     View.OnTouchListener onTouchListenerImage = new View.OnTouchListener()
@@ -255,35 +225,45 @@ public class MyActivity extends Activity
         return true;
     }
 
-    public void saveTShirt()
+
+
+    public void createOrUpdateFragment(String fragmentTag)
     {
-        Bitmap bitmap = rlRootLayout.getDrawingCache();
-        File file, f = null;
-        if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED))
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        tShirtFragment = (TShirtFragment) getSupportFragmentManager().findFragmentByTag(fragmentTag);
+        if (tShirtFragment == null)
         {
-            file = new File(Environment.getExternalStorageDirectory(), "Tshirt_cache");
-            if (!file.exists())
-            {
-                file.mkdirs();
-            }
-            f = new File(file.getAbsolutePath() + File.separator + "front" + ".png");
+            createNewFragment(fragmentTag);
+            tShirtFragment.setRetainInstance(true);
+            ft.replace(R.id.embed_shirt,tShirtFragment,fragmentTag).addToBackStack(null);
+            ft.commit();
         }
-        try
+        else
         {
-            FileOutputStream outputStream = new FileOutputStream(f);
-            bitmap.compress(Bitmap.CompressFormat.PNG, 10, outputStream);
-            outputStream.close();
-            Toast.makeText(this, "SAVE T SHIRT DONE", Toast.LENGTH_LONG).show();
-        }
-        catch (FileNotFoundException e)
-        {
-            e.printStackTrace();
-        }
-        catch (IOException e)
-        {
-            e.printStackTrace();
+            ft.replace(R.id.embed_shirt,tShirtFragment).addToBackStack(null);
+            ft.commit();
         }
 
+    }
+
+    private void createNewFragment(String fragmentTag)
+    {
+        if (fragmentTag.equals(LEFT_TAG))
+        {
+            tShirtFragment = new LeftTShirtFragment();
+        }
+        else if (fragmentTag.equals(FRONT_TAG))
+        {
+            tShirtFragment = new FrontTShirtFragment();
+        }
+        else if (fragmentTag.equals(BACK_TAG))
+        {
+            tShirtFragment = new BackTShirtFragment();
+        }
+        else if (fragmentTag.equals(RIGHT_TAG))
+        {
+            tShirtFragment = new RightTShirtFragment();
+        }
     }
 
 }

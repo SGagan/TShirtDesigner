@@ -5,24 +5,15 @@
               android:layout_height="match_parent">
     <include android:id="@+id/layout_header"
              layout="@layout/header_of_main_layout"/>
-    <RelativeLayout
-            android:id="@+id/main_activity_rlShowTShirt"
+    <FrameLayout
+            android:id="@+id/embed_shirt"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/DarkGray"
             android:layout_above="@id/layout_header">
-        <ImageView
-                android:id="@+id/ivShirt"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"/>
-        <com.free.tshirtdesigner.TouchExampleView
-                android:layout_width="match_parent"
-                android:layout_height="335dp"/>
+    </FrameLayout>
 
-<include layout="@layout/menu_right"/>
 
-</RelativeLayout>
 <include android:id="@+id/layout_footer"
      layout="@layout/footer_of_main_layout"
      android:layout_alignParentBottom="true"/>
