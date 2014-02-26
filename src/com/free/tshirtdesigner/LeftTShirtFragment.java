@@ -1,14 +1,9 @@
 package com.free.tshirtdesigner;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import com.free.tshirtdesigner.util.UtilImage;
 
 /**
  * User: binhtv

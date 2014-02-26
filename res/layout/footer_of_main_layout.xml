@@ -55,7 +55,7 @@
                     android:layout_height="wrap_content"
                     android:background="@drawable/add_text_background"/>
             <Button
-                    android:id="@+id/main_activity_btGetImageGallery"
+                    android:id="@+id/footer_control_btAddImage"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@drawable/add_image_background"/>

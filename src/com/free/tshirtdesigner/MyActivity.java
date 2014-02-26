@@ -1,10 +1,14 @@
 package com.free.tshirtdesigner;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
-import android.view.*;
+import android.view.MotionEvent;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.*;
 import com.free.tshirtdesigner.action.InputActionListener;
 import com.free.tshirtdesigner.dialog.InputDialog;
@@ -92,7 +96,7 @@ public class MyActivity extends FragmentActivity
     private void setUpViewById()
     {
         shapeLayout = (RelativeLayout) getLayoutInflater().inflate(R.layout.shape_layout, null);
-        btGetImageGallery = (Button) findViewById(R.id.main_activity_btGetImageGallery);
+        btGetImageGallery = (Button) findViewById(R.id.footer_control_btAddImage);
         ivImageShow = (ImageView) shapeLayout.findViewById(R.id.main_activity_ivImage);
         ivImageShow.setTag("ImageShow");
         ivResizeTop = (ImageView) shapeLayout.findViewById(R.id.main_activity_ivResizeTop);
@@ -119,8 +123,11 @@ public class MyActivity extends FragmentActivity
         {
             switch (view.getId())
             {
-                case R.id.main_activity_btGetImageGallery:
-                    addLayoutImage();
+                case R.id.footer_control_btAddImage:
+                    Bitmap icon = BitmapFactory.decodeResource(getResources(),
+                            R.drawable.bt_red_popup_small);
+                    tShirtFragment.getRlRootLayout().addView(
+                            new ViewZoomer(getApplicationContext(), icon));
                     break;
                 case R.id.header_btCheckout:
                     Intent intent = new Intent(MyActivity.this, CheckoutActivity.class);
@@ -135,7 +142,7 @@ public class MyActivity extends FragmentActivity
                         public void onSubmit(String result)
                         {
                             tShirtFragment.getRlRootLayout().addView(
-                                    new TouchExampleView(getApplicationContext(), result));
+                                    new ViewZoomer(getApplicationContext(), result));
                         }
                     }).show(getFragmentManager(), "InputDialog");
                     break;
