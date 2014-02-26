@@ -4,9 +4,11 @@
               android:layout_width="match_parent"
               android:layout_height="match_parent">
     <include android:id="@+id/layout_header"
+             android:layout_weight="0.25"
              layout="@layout/header_of_main_layout"/>
     <FrameLayout
             android:id="@+id/embed_shirt"
+            android:layout_weight="0.5"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/DarkGray"
@@ -14,6 +16,7 @@
     </FrameLayout>
 
 <include android:id="@+id/layout_footer"
+         android:layout_weight="0.25"
      layout="@layout/footer_of_main_layout"
      android:layout_alignParentBottom="true"/>
 </LinearLayout>

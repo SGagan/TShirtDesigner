@@ -8,12 +8,14 @@
 
     <TextView
             android:id="@+id/main_tvText"
-            android:text="abcadk"
+            android:text="abcadksdj"
+            android:visibility="gone"
             android:textColor="@color/Black"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
-    <!--<ImageView-->
-            <!--android:layout_width="fill_parent"-->
-            <!--android:layout_height="fill_parent"            -->
-            <!--android:background="@drawable/bound"/>-->
+    <ImageView
+            android:id="@+id/main_ivImage"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:background="@drawable/tshirt_front_500"/>
 </RelativeLayout>
