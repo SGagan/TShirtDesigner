@@ -16,6 +16,7 @@ public class RightTShirtFragment extends TShirtFragment
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
         tShirtDirection = R.drawable.tshirt_right_500;
+        sideTag = MyActivity.RIGHT_TAG;
         return super.onCreateView(inflater, container, savedInstanceState);
     }
 }

@@ -16,6 +16,8 @@ public class FrontTShirtFragment extends TShirtFragment
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
         tShirtDirection = R.drawable.tshirt_front_500;
+        sideTag = MyActivity.FRONT_TAG;
         return super.onCreateView(inflater, container, savedInstanceState);
+
     }
 }

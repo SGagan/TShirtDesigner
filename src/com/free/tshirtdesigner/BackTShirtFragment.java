@@ -16,6 +16,9 @@ public class BackTShirtFragment extends TShirtFragment
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
         tShirtDirection = R.drawable.tshirt_back_500;
+        sideTag = MyActivity.BACK_TAG;
         return super.onCreateView(inflater, container, savedInstanceState);
     }
+
+
 }

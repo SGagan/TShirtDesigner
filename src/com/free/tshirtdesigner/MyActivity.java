@@ -17,7 +17,9 @@ import com.free.tshirtdesigner.model.LayerModel;
 import com.free.tshirtdesigner.util.setting.ConstantValue;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static android.widget.RelativeLayout.LayoutParams;
 
@@ -50,6 +52,9 @@ public class MyActivity extends FragmentActivity
     private ListView lvListLayer;
     private int currentLayer = -1;
     private List<LayerModel> layerModels = new ArrayList<LayerModel>();
+    Map<String, List<View>> zoomViewsMap = new HashMap<String, List<View>>();
+    List<View> currentZoomView = new ArrayList<View>();
+    public String currentSide;
 
     @Override
     public void onCreate(Bundle savedInstanceState)
@@ -59,6 +64,7 @@ public class MyActivity extends FragmentActivity
         setUpViewById();
         setActionListener();
 
+        currentSide = FRONT_TAG;
         createOrUpdateFragment(FRONT_TAG);
         // footer controller
         RadioGroup rgShirtViewType = (RadioGroup) findViewById(R.id.rgShirtViewType);
@@ -159,6 +165,7 @@ public class MyActivity extends FragmentActivity
                     Bitmap icon = BitmapFactory.decodeResource(getResources(), R.drawable.bt_red_popup_small);
                     ViewZoomer viewZoomer = new ViewZoomer(getApplicationContext(), icon);
                     tShirtFragment.getRlRootLayout().addView(viewZoomer);
+                    currentZoomView.add(viewZoomer);
                     String name = getResources().getResourceEntryName(R.drawable.bt_red_popup_small);
                     layerModels.add(new LayerModel(countLayer++, ConstantValue.IMAGE_ITEM_TYPE, name, viewZoomer));
                     break;
@@ -175,6 +182,7 @@ public class MyActivity extends FragmentActivity
                         public void onSubmit(String result)
                         {
                             ViewZoomer viewZoomer = new ViewZoomer(getApplicationContext(), result);
+                            currentZoomView.add(viewZoomer);
                             tShirtFragment.getRlRootLayout().addView(viewZoomer);
                             layerModels.add(new LayerModel(countLayer++, ConstantValue.TEXT_ITEM_TYPE, result, viewZoomer));
                         }
@@ -267,8 +275,10 @@ public class MyActivity extends FragmentActivity
 
     public void createOrUpdateFragment(String fragmentTag)
     {
+
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         tShirtFragment = (TShirtFragment) getSupportFragmentManager().findFragmentByTag(fragmentTag);
+
         if (tShirtFragment == null)
         {
             createNewFragment(fragmentTag);
@@ -281,7 +291,6 @@ public class MyActivity extends FragmentActivity
             ft.replace(R.id.embed_shirt, tShirtFragment).addToBackStack(null);
             ft.commit();
         }
-
     }
 
     private void createNewFragment(String fragmentTag)
@@ -302,6 +311,24 @@ public class MyActivity extends FragmentActivity
         {
             tShirtFragment = new RightTShirtFragment();
         }
+    }
+
+
+    public void saveState(String sideTag)
+    {
+        zoomViewsMap.put(sideTag, currentZoomView);
+        currentZoomView = new ArrayList<View>();
+    }
+
+    public List<View> getView(String sideTag)
+    {
+        return zoomViewsMap.get(sideTag);
+    }
+
+    public void setCurrentZoomView(List<View> views)
+    {
+        currentZoomView = views;
+
     }
 
 }

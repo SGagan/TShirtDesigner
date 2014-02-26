@@ -20,6 +20,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.List;
 
 /**
  * User: binhtv
@@ -33,7 +34,8 @@ public class TShirtFragment extends Fragment
     LinearLayout llRightMenu;
     GridView gvColorChooser;
     String colors = "white";
-    int tShirtDirection;
+    public int tShirtDirection;
+    String sideTag;
     private ListView lvListLayer;
 
     @Override
@@ -47,7 +49,6 @@ public class TShirtFragment extends Fragment
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent)
             {
-//                return onTouchShirt(view, motionEvent);
                 return false;
             }
         });
@@ -72,8 +73,18 @@ public class TShirtFragment extends Fragment
         lvListLayer = (ListView) rlRootLayout.findViewById(R.id.menu_right_lvListLayer);
 
         showDirectionTShirt();
+        // get old view
+        List<View> viewList = getMainActivity().getView(sideTag);
+        if (viewList != null && viewList.size() > 0)
+        {
+            for (View zoomView : viewList)
+            {
+                rlRootLayout.addView(zoomView);
+            }
+            getMainActivity().setCurrentZoomView(viewList);
 
 
+        }
         return rlRootLayout;
     }
 
@@ -139,6 +150,22 @@ public class TShirtFragment extends Fragment
         {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public void onDestroyView()
+    {
+        super.onDestroyView();
+        if (rlRootLayout != null)
+        {
+            rlRootLayout.removeAllViewsInLayout();
+        }
+        getMainActivity().saveState(sideTag);
+    }
+
+    public MyActivity getMainActivity()
+    {
+        return (MyActivity) getActivity();
     }
 
     public ListView getLvListLayer()
