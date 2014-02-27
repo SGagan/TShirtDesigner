@@ -8,7 +8,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
-import android.view.Display;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,6 +30,8 @@ import static android.widget.RelativeLayout.LayoutParams;
 public class MyActivity extends FragmentActivity
 {
     private static final int CHECKOUT_CODE = 100;
+    private int home_x, home_y;
+    private LayoutParams layoutParams;
     private Button btGetImageGallery;
     private Button btTakePhoto;
     private RelativeLayout shapeLayout;
@@ -41,6 +42,10 @@ public class MyActivity extends FragmentActivity
     private Button btnCheckout;
     private Button btnLeftMenu;
     private Button btAddText;
+
+    private int tShirtDirection;
+    private int _yDelta;
+    private int _xDelta;
     public static final String FRONT_TAG = "FRONT";
     public static final String LEFT_TAG = "LEFT";
     public static final String RIGHT_TAG = "RIGHT";
@@ -48,7 +53,7 @@ public class MyActivity extends FragmentActivity
 
 
     TShirtFragment tShirtFragment;
-    private int countLayer = 0;
+    private int countLayer = -1;
     private ListView lvListLayer;
     private int currentLayer = -1;
     private List<LayerModel> layerModels = new ArrayList<LayerModel>();
@@ -126,6 +131,10 @@ public class MyActivity extends FragmentActivity
                 else
                 {
                     tShirtFragment.getLlRightMenu().setVisibility(View.GONE);
+                    if (currentLayer != -1)
+                    {
+                        layerModels.get(currentLayer).getViewZoomer().setEnabled(true);
+                    }
                 }
             }
         });
@@ -189,6 +198,7 @@ public class MyActivity extends FragmentActivity
                             currentZoomView.add(viewZoomer);
                             tShirtFragment.getRlRootLayout().addView(viewZoomer);
                             layerModels.add(new LayerModel(countLayer++, ConstantValue.TEXT_ITEM_TYPE, result, viewZoomer));
+                            currentLayer = countLayer;
                         }
                     }).show(getFragmentManager(), "InputDialog");
                     break;
@@ -209,7 +219,12 @@ public class MyActivity extends FragmentActivity
                 Uri mImageCaptureUri = data.getData();
                 mImageCaptureUri = Uri.fromFile(new File(UtilImage.getRealPathFromURI(this, mImageCaptureUri)));
                 Bitmap icon = BitmapFactory.decodeFile(mImageCaptureUri.getPath());
-                addViewZoomAndModel(icon);
+                ViewZoomer viewZoomer = new ViewZoomer(getApplicationContext(), scaleImage(icon, 70, 70));
+                tShirtFragment.getRlRootLayout().addView(viewZoomer);
+                currentZoomView.add(viewZoomer);
+                String name = getResources().getResourceEntryName(R.drawable.bt_red_popup_small);
+                layerModels.add(new LayerModel(countLayer++, ConstantValue.IMAGE_ITEM_TYPE, name, viewZoomer));
+                currentLayer = countLayer;
                 break;
             case ConstantValue.CAPTURE_PICTURE:
                 Bitmap photo = (Bitmap) data.getExtras().get("data");
@@ -217,12 +232,16 @@ public class MyActivity extends FragmentActivity
         }
     }
 
-    private void addViewZoomAndModel(Bitmap icon) {
-        ViewZoomer viewZoomer = new ViewZoomer(getApplicationContext(), UtilImage.scaleImage(icon, 200, 200));
-        tShirtFragment.getRlRootLayout().addView(viewZoomer);
-        currentZoomView.add(viewZoomer);
-        String name = getResources().getResourceEntryName(R.drawable.bt_red_popup_small);
-        layerModels.add(new LayerModel(countLayer++, ConstantValue.IMAGE_ITEM_TYPE, name, viewZoomer));
+    private void addLayoutImage()
+    {
+        RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT);
+        shapeLayout.setLayoutParams(layoutParams);
+        ivImageShow.setImageResource(R.drawable.ic_launcher);
+        ivImageShow.setOnTouchListener(onTouchListenerImage);
+        ivResizeBottom.setOnTouchListener(onTouchListenerImage);
+        ivResizeTop.setOnTouchListener(onTouchListenerImage);
+        tShirtFragment.getRlRootLayout().addView(shapeLayout);
     }
 //
 //    private void actionImageShow(MotionEvent motionEvent, int x, int y)
@@ -307,6 +326,29 @@ public class MyActivity extends FragmentActivity
     public void setCurrentZoomView(List<View> views)
     {
         currentZoomView = views;
+
+    }
+
+    private Bitmap scaleImage(Bitmap bitmap, int maxWidth, int maxHeight)
+    {
+//        int widthBitmap = bitmap.getWidth();
+//        int heightBitmap = bitmap.getHeight();
+//        if (widthBitmap > heightBitmap)
+//        {
+//            return Bitmap.createScaledBitmap(bitmap, 200, heightBitmap * 200 / widthBitmap, true);
+//        }
+//        else
+//        {
+//            return Bitmap.createScaledBitmap(bitmap, widthBitmap*200/heightBitmap, 200, true);
+//        }
+        double ratioX = (double) maxWidth / bitmap.getWidth();
+        double ratioY = (double) maxHeight / bitmap.getHeight();
+        double ratio = Math.min(ratioX, ratioY);
+
+        int newWidth = (int) (bitmap.getWidth() * ratio);
+        int newHeight = (int) (bitmap.getHeight() * ratio);
+
+        return Bitmap.createScaledBitmap(bitmap, newWidth, newHeight, true);
 
     }
 
