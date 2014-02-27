@@ -228,7 +228,7 @@ public class MyActivity extends FragmentActivity
     }
 
     private void addZoomAndModelLayout(Bitmap icon) {
-        ViewZoomer viewZoomer = new ViewZoomer(getApplicationContext(), scaleImage(icon, 70, 70));
+        ViewZoomer viewZoomer = new ViewZoomer(getApplicationContext(), scaleImage(icon, 200, 200));
         tShirtFragment.getRlRootLayout().addView(viewZoomer);
         currentZoomView.add(viewZoomer);
         String name = getResources().getResourceEntryName(R.drawable.bt_red_popup_small);
