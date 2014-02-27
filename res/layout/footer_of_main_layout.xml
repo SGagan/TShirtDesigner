@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:id="@+id/footer_control_llFooterControl"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
               android:orientation="horizontal"
               android:paddingTop="@dimen/small_margin_size">
-    <Button android:id="@+id/btn_left_menu"
+    <Button android:id="@+id/footer_control_btShowLeftMenu"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/left_setting_background"

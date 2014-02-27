@@ -15,9 +15,9 @@
             android:layout_above="@id/layout_header">
     </FrameLayout>
 
-<include android:id="@+id/layout_footer"
-         android:layout_weight="0.25"
-     layout="@layout/footer_of_main_layout"
-     android:layout_alignParentBottom="true"/>
+    <include android:id="@+id/layout_footer"
+             android:layout_weight="0.25"
+             layout="@layout/footer_of_main_layout"
+             android:layout_alignParentBottom="true"/>
 </LinearLayout>
 
