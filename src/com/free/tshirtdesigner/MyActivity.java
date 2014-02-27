@@ -1,11 +1,14 @@
 package com.free.tshirtdesigner;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
+import android.view.Display;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,8 +17,10 @@ import com.free.tshirtdesigner.action.InputActionListener;
 import com.free.tshirtdesigner.adapter.LayerArrayAdapter;
 import com.free.tshirtdesigner.dialog.InputDialog;
 import com.free.tshirtdesigner.model.LayerModel;
+import com.free.tshirtdesigner.util.UtilImage;
 import com.free.tshirtdesigner.util.setting.ConstantValue;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -162,12 +167,10 @@ public class MyActivity extends FragmentActivity
             switch (view.getId())
             {
                 case R.id.footer_control_btAddImage:
-                    Bitmap icon = BitmapFactory.decodeResource(getResources(), R.drawable.bt_red_popup_small);
-                    ViewZoomer viewZoomer = new ViewZoomer(getApplicationContext(), icon);
-                    tShirtFragment.getRlRootLayout().addView(viewZoomer);
-                    currentZoomView.add(viewZoomer);
-                    String name = getResources().getResourceEntryName(R.drawable.bt_red_popup_small);
-                    layerModels.add(new LayerModel(countLayer++, ConstantValue.IMAGE_ITEM_TYPE, name, viewZoomer));
+                    Intent intentGallery = new Intent();
+                    intentGallery.setType("image/*");
+                    intentGallery.setAction(Intent.ACTION_GET_CONTENT);
+                    startActivityForResult(Intent.createChooser(intentGallery, "Complete action using"), ConstantValue.PICK_FROM_FILE);
                     break;
                 case R.id.header_btCheckout:
                     Intent intent = new Intent(MyActivity.this, CheckoutActivity.class);
@@ -191,6 +194,29 @@ public class MyActivity extends FragmentActivity
             }
         }
     };
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
+        if (resultCode != Activity.RESULT_OK)
+        {
+            return;
+        }
+        switch (requestCode)
+        {
+
+            case ConstantValue.PICK_FROM_FILE:
+                Uri mImageCaptureUri = data.getData();
+                mImageCaptureUri = Uri.fromFile(new File(UtilImage.getRealPathFromURI(this, mImageCaptureUri)));
+                Bitmap icon = BitmapFactory.decodeFile(mImageCaptureUri.getPath());
+                ViewZoomer viewZoomer = new ViewZoomer(getApplicationContext(), scaleImage(icon,70,70));
+                tShirtFragment.getRlRootLayout().addView(viewZoomer);
+                currentZoomView.add(viewZoomer);
+                String name = getResources().getResourceEntryName(R.drawable.bt_red_popup_small);
+                layerModels.add(new LayerModel(countLayer++, ConstantValue.IMAGE_ITEM_TYPE, name, viewZoomer));
+                break;
+        }
+    }
 
     private void addLayoutImage()
     {
@@ -328,6 +354,29 @@ public class MyActivity extends FragmentActivity
     public void setCurrentZoomView(List<View> views)
     {
         currentZoomView = views;
+
+    }
+
+    private Bitmap scaleImage(Bitmap bitmap,int maxWidth,int maxHeight)
+    {
+//        int widthBitmap = bitmap.getWidth();
+//        int heightBitmap = bitmap.getHeight();
+//        if (widthBitmap > heightBitmap)
+//        {
+//            return Bitmap.createScaledBitmap(bitmap, 200, heightBitmap * 200 / widthBitmap, true);
+//        }
+//        else
+//        {
+//            return Bitmap.createScaledBitmap(bitmap, widthBitmap*200/heightBitmap, 200, true);
+//        }
+        double ratioX = (double)maxWidth / bitmap.getWidth();
+        double ratioY = (double)maxHeight / bitmap.getHeight();
+        double ratio = Math.min(ratioX, ratioY);
+
+        int newWidth = (int)(bitmap.getWidth() * ratio);
+        int newHeight = (int)(bitmap.getHeight() * ratio);
+
+        return  Bitmap.createScaledBitmap(bitmap, newWidth, newHeight, true);
 
     }
 

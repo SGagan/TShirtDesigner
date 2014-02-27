@@ -1,8 +1,12 @@
 package com.free.tshirtdesigner.util;
 
+import android.content.Context;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
+import android.net.Uri;
+import android.provider.MediaStore;
 import android.widget.ImageView;
 
 /**
@@ -52,4 +56,18 @@ public class UtilImage
     {
         return ((BitmapDrawable) imageView.getDrawable()).getBitmap();
     }
+
+    public static String getRealPathFromURI(Context context, Uri contentURI)
+    {
+        Cursor cursor = context.getContentResolver().query(contentURI, null, null, null, null);
+        if (cursor == null)
+        {
+            return contentURI.getPath();
+        }
+        cursor.moveToFirst();
+        int idx = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA);
+        return cursor.getString(idx);
+    }
+
+
 }
