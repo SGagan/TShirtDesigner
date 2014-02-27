@@ -28,6 +28,7 @@ import static android.widget.RelativeLayout.LayoutParams;
 
 public class MyActivity extends FragmentActivity
 {
+    boolean exist=false;
     private static final int CHECKOUT_CODE = 100;
     private int home_x, home_y;
     private LayoutParams layoutParams;
@@ -253,56 +254,12 @@ public class MyActivity extends FragmentActivity
 
     private void addZoomAndModelLayout(Bitmap icon)
     {
-        ViewZoomer viewZoomer = new ViewZoomer(getApplicationContext(), scaleImage(icon, 70, 70));
-    private void addZoomAndModelLayout(Bitmap icon) {
         ViewZoomer viewZoomer = new ViewZoomer(getApplicationContext(), scaleImage(icon, 200, 200));
         tShirtFragment.getRlRootLayout().addView(viewZoomer);
         currentZoomView.add(viewZoomer);
         String name = getResources().getResourceEntryName(R.drawable.bt_red_popup_small);
         layerModels.add(new LayerModel(countLayer++, ConstantValue.IMAGE_ITEM_TYPE, name, viewZoomer));
         currentLayer = countLayer;
-    }
-
-    View.OnTouchListener onTouchListenerImage = new View.OnTouchListener()
-    {
-        @Override
-        public boolean onTouch(View view, MotionEvent motionEvent)
-        {
-            final int X = (int) motionEvent.getRawX();
-            final int Y = (int) motionEvent.getRawY();
-            if (view.getTag().equals("ImageShow"))
-            {
-                actionImageShow(motionEvent, X, Y);
-            }
-            return true;
-        }
-    };
-
-    private void actionImageShow(MotionEvent motionEvent, int x, int y)
-    {
-        switch (motionEvent.getAction() & MotionEvent.ACTION_MASK)
-        {
-            case MotionEvent.ACTION_DOWN:
-                RelativeLayout.LayoutParams lParams = (RelativeLayout.LayoutParams) shapeLayout.getLayoutParams();
-                _xDelta = x - lParams.leftMargin;
-                _yDelta = y - lParams.topMargin;
-                break;
-            case MotionEvent.ACTION_UP:
-                break;
-            case MotionEvent.ACTION_POINTER_DOWN:
-                break;
-            case MotionEvent.ACTION_POINTER_UP:
-                break;
-            case MotionEvent.ACTION_MOVE:
-                RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) shapeLayout.getLayoutParams();
-                layoutParams.leftMargin = x - _xDelta;
-                layoutParams.topMargin = y - _yDelta;
-                layoutParams.rightMargin = -250;
-                layoutParams.bottomMargin = -250;
-                shapeLayout.setLayoutParams(layoutParams);
-                break;
-        }
-        shapeLayout.invalidate();
     }
 
     private boolean onTouchShirt(View view, MotionEvent motionEvent)
@@ -412,4 +369,19 @@ public class MyActivity extends FragmentActivity
 
     }
 
+    @Override
+    public void onBackPressed() {
+        if(exist)
+        {
+            Intent startMain = new Intent(Intent.ACTION_MAIN);
+            startMain.addCategory(Intent.CATEGORY_HOME);
+            startMain.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(startMain);
+        }
+        else
+        {
+            exist=true;
+            Toast.makeText(this,"Back press a time to exist", Toast.LENGTH_SHORT).show();
+        }
+    }
 }
