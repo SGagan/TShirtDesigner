@@ -219,30 +219,23 @@ public class MyActivity extends FragmentActivity
                 Uri mImageCaptureUri = data.getData();
                 mImageCaptureUri = Uri.fromFile(new File(UtilImage.getRealPathFromURI(this, mImageCaptureUri)));
                 Bitmap icon = BitmapFactory.decodeFile(mImageCaptureUri.getPath());
-                ViewZoomer viewZoomer = new ViewZoomer(getApplicationContext(), scaleImage(icon, 70, 70));
-                tShirtFragment.getRlRootLayout().addView(viewZoomer);
-                currentZoomView.add(viewZoomer);
-                String name = getResources().getResourceEntryName(R.drawable.bt_red_popup_small);
-                layerModels.add(new LayerModel(countLayer++, ConstantValue.IMAGE_ITEM_TYPE, name, viewZoomer));
-                currentLayer = countLayer;
+                addZoomAndModelLayout(icon);
                 break;
             case ConstantValue.CAPTURE_PICTURE:
                 Bitmap photo = (Bitmap) data.getExtras().get("data");
-                addViewZoomAndModel(photo);
+                addZoomAndModelLayout(photo);
         }
     }
 
-    private void addLayoutImage()
-    {
-        RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT);
-        shapeLayout.setLayoutParams(layoutParams);
-        ivImageShow.setImageResource(R.drawable.ic_launcher);
-        ivImageShow.setOnTouchListener(onTouchListenerImage);
-        ivResizeBottom.setOnTouchListener(onTouchListenerImage);
-        ivResizeTop.setOnTouchListener(onTouchListenerImage);
-        tShirtFragment.getRlRootLayout().addView(shapeLayout);
+    private void addZoomAndModelLayout(Bitmap icon) {
+        ViewZoomer viewZoomer = new ViewZoomer(getApplicationContext(), scaleImage(icon, 70, 70));
+        tShirtFragment.getRlRootLayout().addView(viewZoomer);
+        currentZoomView.add(viewZoomer);
+        String name = getResources().getResourceEntryName(R.drawable.bt_red_popup_small);
+        layerModels.add(new LayerModel(countLayer++, ConstantValue.IMAGE_ITEM_TYPE, name, viewZoomer));
+        currentLayer = countLayer;
     }
+
 //
 //    private void actionImageShow(MotionEvent motionEvent, int x, int y)
 //    {
