@@ -31,9 +31,8 @@ import static android.widget.RelativeLayout.LayoutParams;
 public class MyActivity extends FragmentActivity
 {
     private static final int CHECKOUT_CODE = 100;
-    private int home_x, home_y;
-    private LayoutParams layoutParams;
     private Button btGetImageGallery;
+    private Button btTakePhoto;
     private RelativeLayout shapeLayout;
     private ImageView ivImageShow;
     private ImageView ivResizeBottom;
@@ -42,10 +41,6 @@ public class MyActivity extends FragmentActivity
     private Button btnCheckout;
     private Button btnLeftMenu;
     private Button btAddText;
-
-    private int tShirtDirection;
-    private int _yDelta;
-    private int _xDelta;
     public static final String FRONT_TAG = "FRONT";
     public static final String LEFT_TAG = "LEFT";
     public static final String RIGHT_TAG = "RIGHT";
@@ -140,6 +135,7 @@ public class MyActivity extends FragmentActivity
     {
         shapeLayout = (RelativeLayout) getLayoutInflater().inflate(R.layout.shape_layout, null);
         btGetImageGallery = (Button) findViewById(R.id.footer_control_btAddImage);
+        btTakePhoto = (Button) findViewById(R.id.footer_control_btTakePhoto);
         ivImageShow = (ImageView) shapeLayout.findViewById(R.id.main_activity_ivImage);
         ivImageShow.setTag("ImageShow");
         ivResizeTop = (ImageView) shapeLayout.findViewById(R.id.main_activity_ivResizeTop);
@@ -154,6 +150,7 @@ public class MyActivity extends FragmentActivity
     private void setActionListener()
     {
         btGetImageGallery.setOnClickListener(onClickListener);
+        btTakePhoto.setOnClickListener(onClickListener);
         btnCheckout.setOnClickListener(onClickListener);
         btnLeftMenu.setOnClickListener(onClickListener);
         btAddText.setOnClickListener(onClickListener);
@@ -171,6 +168,10 @@ public class MyActivity extends FragmentActivity
                     intentGallery.setType("image/*");
                     intentGallery.setAction(Intent.ACTION_GET_CONTENT);
                     startActivityForResult(Intent.createChooser(intentGallery, "Complete action using"), ConstantValue.PICK_FROM_FILE);
+                    break;
+                case R.id.footer_control_btTakePhoto:
+                    Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+                    startActivityForResult(cameraIntent, ConstantValue.CAPTURE_PICTURE);
                     break;
                 case R.id.header_btCheckout:
                     Intent intent = new Intent(MyActivity.this, CheckoutActivity.class);
@@ -204,100 +205,52 @@ public class MyActivity extends FragmentActivity
         }
         switch (requestCode)
         {
-
             case ConstantValue.PICK_FROM_FILE:
                 Uri mImageCaptureUri = data.getData();
                 mImageCaptureUri = Uri.fromFile(new File(UtilImage.getRealPathFromURI(this, mImageCaptureUri)));
                 Bitmap icon = BitmapFactory.decodeFile(mImageCaptureUri.getPath());
-                ViewZoomer viewZoomer = new ViewZoomer(getApplicationContext(), scaleImage(icon,70,70));
-                tShirtFragment.getRlRootLayout().addView(viewZoomer);
-                currentZoomView.add(viewZoomer);
-                String name = getResources().getResourceEntryName(R.drawable.bt_red_popup_small);
-                layerModels.add(new LayerModel(countLayer++, ConstantValue.IMAGE_ITEM_TYPE, name, viewZoomer));
+                addViewZoomAndModel(icon);
                 break;
+            case ConstantValue.CAPTURE_PICTURE:
+                Bitmap photo = (Bitmap) data.getExtras().get("data");
+                addViewZoomAndModel(photo);
         }
     }
 
-    private void addLayoutImage()
-    {
-        RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT);
-        shapeLayout.setLayoutParams(layoutParams);
-        ivImageShow.setImageResource(R.drawable.ic_launcher);
-        ivImageShow.setOnTouchListener(onTouchListenerImage);
-        ivResizeBottom.setOnTouchListener(onTouchListenerImage);
-        ivResizeTop.setOnTouchListener(onTouchListenerImage);
-        tShirtFragment.getRlRootLayout().addView(shapeLayout);
+    private void addViewZoomAndModel(Bitmap icon) {
+        ViewZoomer viewZoomer = new ViewZoomer(getApplicationContext(), UtilImage.scaleImage(icon, 200, 200));
+        tShirtFragment.getRlRootLayout().addView(viewZoomer);
+        currentZoomView.add(viewZoomer);
+        String name = getResources().getResourceEntryName(R.drawable.bt_red_popup_small);
+        layerModels.add(new LayerModel(countLayer++, ConstantValue.IMAGE_ITEM_TYPE, name, viewZoomer));
     }
-
-    View.OnTouchListener onTouchListenerImage = new View.OnTouchListener()
-    {
-        @Override
-        public boolean onTouch(View view, MotionEvent motionEvent)
-        {
-            final int X = (int) motionEvent.getRawX();
-            final int Y = (int) motionEvent.getRawY();
-            if (view.getTag().equals("ImageShow"))
-            {
-                actionImageShow(motionEvent, X, Y);
-            }
-            return true;
-        }
-    };
-
-    private void actionImageShow(MotionEvent motionEvent, int x, int y)
-    {
-        switch (motionEvent.getAction() & MotionEvent.ACTION_MASK)
-        {
-            case MotionEvent.ACTION_DOWN:
-                RelativeLayout.LayoutParams lParams = (RelativeLayout.LayoutParams) shapeLayout.getLayoutParams();
-                _xDelta = x - lParams.leftMargin;
-                _yDelta = y - lParams.topMargin;
-                break;
-            case MotionEvent.ACTION_UP:
-                break;
-            case MotionEvent.ACTION_POINTER_DOWN:
-                break;
-            case MotionEvent.ACTION_POINTER_UP:
-                break;
-            case MotionEvent.ACTION_MOVE:
-                RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) shapeLayout.getLayoutParams();
-                layoutParams.leftMargin = x - _xDelta;
-                layoutParams.topMargin = y - _yDelta;
-                layoutParams.rightMargin = -250;
-                layoutParams.bottomMargin = -250;
-                shapeLayout.setLayoutParams(layoutParams);
-                break;
-        }
-        shapeLayout.invalidate();
-    }
-
-    private boolean onTouchShirt(View view, MotionEvent motionEvent)
-    {
-        layoutParams = (LayoutParams) view.getLayoutParams();
-        switch (motionEvent.getAction())
-        {
-            case MotionEvent.ACTION_DOWN:
-                home_x = (int) motionEvent.getRawX();
-                home_y = (int) motionEvent.getRawY();
-                break;
-            case MotionEvent.ACTION_MOVE:
-                int x_moved = (int) motionEvent.getRawX();
-                int y_moved = (int) motionEvent.getRawY();
-
-                layoutParams.leftMargin = (x_moved >= home_x) ? x_moved - home_x : home_x - x_moved;
-                layoutParams.topMargin = (y_moved >= home_y) ? y_moved - home_y : home_y - y_moved;
-
-                view.setLayoutParams(layoutParams);
-                break;
-            case MotionEvent.ACTION_UP:
-                layoutParams.leftMargin = 0;
-                layoutParams.topMargin = 0;
-                view.setLayoutParams(layoutParams);
-                break;
-        }
-        return true;
-    }
+//
+//    private void actionImageShow(MotionEvent motionEvent, int x, int y)
+//    {
+//        switch (motionEvent.getAction() & MotionEvent.ACTION_MASK)
+//        {
+//            case MotionEvent.ACTION_DOWN:
+//                RelativeLayout.LayoutParams lParams = (RelativeLayout.LayoutParams) shapeLayout.getLayoutParams();
+//                _xDelta = x - lParams.leftMargin;
+//                _yDelta = y - lParams.topMargin;
+//                break;
+//            case MotionEvent.ACTION_UP:
+//                break;
+//            case MotionEvent.ACTION_POINTER_DOWN:
+//                break;
+//            case MotionEvent.ACTION_POINTER_UP:
+//                break;
+//            case MotionEvent.ACTION_MOVE:
+//                RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) shapeLayout.getLayoutParams();
+//                layoutParams.leftMargin = x - _xDelta;
+//                layoutParams.topMargin = y - _yDelta;
+//                layoutParams.rightMargin = -250;
+//                layoutParams.bottomMargin = -250;
+//                shapeLayout.setLayoutParams(layoutParams);
+//                break;
+//        }
+//        shapeLayout.invalidate();
+//    }
 
     public void createOrUpdateFragment(String fragmentTag)
     {
@@ -354,29 +307,6 @@ public class MyActivity extends FragmentActivity
     public void setCurrentZoomView(List<View> views)
     {
         currentZoomView = views;
-
-    }
-
-    private Bitmap scaleImage(Bitmap bitmap,int maxWidth,int maxHeight)
-    {
-//        int widthBitmap = bitmap.getWidth();
-//        int heightBitmap = bitmap.getHeight();
-//        if (widthBitmap > heightBitmap)
-//        {
-//            return Bitmap.createScaledBitmap(bitmap, 200, heightBitmap * 200 / widthBitmap, true);
-//        }
-//        else
-//        {
-//            return Bitmap.createScaledBitmap(bitmap, widthBitmap*200/heightBitmap, 200, true);
-//        }
-        double ratioX = (double)maxWidth / bitmap.getWidth();
-        double ratioY = (double)maxHeight / bitmap.getHeight();
-        double ratio = Math.min(ratioX, ratioY);
-
-        int newWidth = (int)(bitmap.getWidth() * ratio);
-        int newHeight = (int)(bitmap.getHeight() * ratio);
-
-        return  Bitmap.createScaledBitmap(bitmap, newWidth, newHeight, true);
 
     }
 

@@ -21,4 +21,5 @@ public class ConstantValue
     public static final int IMAGE_ITEM_TYPE = 1;
 
     public static final int PICK_FROM_FILE = 777;
+    public static final int CAPTURE_PICTURE = 999;
 }

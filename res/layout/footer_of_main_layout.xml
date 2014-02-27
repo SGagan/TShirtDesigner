@@ -59,10 +59,13 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@drawable/add_image_background"/>
-            <Button android:layout_width="wrap_content"
+            <Button
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@drawable/add_circle_background"/>
-            <Button android:layout_width="wrap_content"
+            <Button
+                    android:id="@+id/footer_control_btTakePhoto"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@drawable/add_rectangle_background"/>
         </LinearLayout>

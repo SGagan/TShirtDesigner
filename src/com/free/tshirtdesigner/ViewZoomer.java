@@ -2,13 +2,16 @@ package com.free.tshirtdesigner;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.drawable.BitmapDrawable;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import com.free.tshirtdesigner.util.UtilImage;
 
 import static android.widget.RelativeLayout.LayoutParams.WRAP_CONTENT;
 
@@ -19,8 +22,7 @@ public class ViewZoomer extends View
     private ImageView mImage;
     private float mPosX;
     private float mPosY;
-    private String font;
-    private String color;
+    private Bitmap bitmap;
 
     private VersionedGestureDetector mDetector;
 
@@ -49,6 +51,7 @@ public class ViewZoomer extends View
     public ViewZoomer(Context context, Bitmap bitmap)
     {
         super(context);
+        this.bitmap = bitmap;
         LayoutInflater layoutInflater = LayoutInflater.from(context);
         rlContent = (RelativeLayout) layoutInflater.inflate(R.layout.image_item, null);
         rlContent.setLayoutParams(new RelativeLayout.LayoutParams(WRAP_CONTENT, WRAP_CONTENT));
@@ -86,7 +89,9 @@ public class ViewZoomer extends View
         canvas.translate(mPosX, mPosY);
         canvas.scale(mScaleFactor, mScaleFactor);
         rlContent.draw(canvas);
+
         canvas.restore();
+        mImage.setImageBitmap(bitmap);
     }
 
     private class GestureCallback implements VersionedGestureDetector.OnGestureListener
