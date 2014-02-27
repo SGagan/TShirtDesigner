@@ -10,7 +10,6 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.*;
 import com.free.tshirtdesigner.action.InputActionListener;
 import com.free.tshirtdesigner.adapter.LayerArrayAdapter;
@@ -32,8 +31,8 @@ public class MyActivity extends FragmentActivity
     private static final int CHECKOUT_CODE = 100;
     private int home_x, home_y;
     private LayoutParams layoutParams;
-    private Button btGetImageGallery;
     private Button btTakePhoto;
+    private Button btAddImage;
     private RelativeLayout shapeLayout;
     private ImageView ivImageShow;
     private ImageView ivResizeBottom;
@@ -41,6 +40,7 @@ public class MyActivity extends FragmentActivity
     //    private RelativeLayout rlRootLayout;
     private Button btnCheckout;
     private Button btnLeftMenu;
+    private Button btnRightMenu;
     private Button btAddText;
 
     private int tShirtDirection;
@@ -66,11 +66,13 @@ public class MyActivity extends FragmentActivity
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
-        setUpViewById();
-        setActionListener();
 
         currentSide = FRONT_TAG;
         createOrUpdateFragment(FRONT_TAG);
+
+        setUpViewById();
+        setActionListener();
+
         // footer controller
         RadioGroup rgShirtViewType = (RadioGroup) findViewById(R.id.rgShirtViewType);
         rgShirtViewType.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener()
@@ -97,53 +99,11 @@ public class MyActivity extends FragmentActivity
 
         RadioButton rbFront = (RadioButton) findViewById(R.id.rbFrontSide);
         rbFront.setChecked(true);
-
-        findViewById(R.id.footer_control_btShowRightMenu).setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View view)
-            {
-                if (tShirtFragment.getLlRightMenu().getVisibility() == View.GONE)
-                {
-                    LayerModel[] layers = new LayerModel[layerModels.size()];
-                    layers = layerModels.toArray(layers);
-                    LayerArrayAdapter adapter = new LayerArrayAdapter(MyActivity.this, R.id.menu_right_lvListLayer, layers);
-                    lvListLayer = tShirtFragment.getLvListLayer();
-                    lvListLayer.setAdapter(adapter);
-                    lvListLayer.setOnItemClickListener(new AdapterView.OnItemClickListener()
-                    {
-                        @Override
-                        public void onItemClick(AdapterView<?> adapterView, View view, int i, long l)
-                        {
-                            Toast.makeText(getApplicationContext(), "item " + i, Toast.LENGTH_SHORT).show();
-                            layerModels.get(i).getViewZoomer().setEnabled(true);
-                            currentLayer = i;
-                            tShirtFragment.getLlRightMenu().setVisibility(View.GONE);
-                        }
-                    });
-                    for (LayerModel layer : layerModels)
-                    {
-                        layer.getViewZoomer().setEnabled(false);
-                    }
-                    tShirtFragment.getRlRootLayout().bringChildToFront(tShirtFragment.getLlRightMenu());
-                    tShirtFragment.getLlRightMenu().setVisibility(View.VISIBLE);
-                }
-                else
-                {
-                    tShirtFragment.getLlRightMenu().setVisibility(View.GONE);
-                    if (currentLayer != -1)
-                    {
-                        layerModels.get(currentLayer).getViewZoomer().setEnabled(true);
-                    }
-                }
-            }
-        });
     }
 
     private void setUpViewById()
     {
         shapeLayout = (RelativeLayout) getLayoutInflater().inflate(R.layout.shape_layout, null);
-        btGetImageGallery = (Button) findViewById(R.id.footer_control_btAddImage);
         btTakePhoto = (Button) findViewById(R.id.footer_control_btTakePhoto);
         ivImageShow = (ImageView) shapeLayout.findViewById(R.id.main_activity_ivImage);
         ivImageShow.setTag("ImageShow");
@@ -151,17 +111,23 @@ public class MyActivity extends FragmentActivity
         ivResizeTop.setTag("ResizeTop");
         ivResizeBottom = (ImageView) shapeLayout.findViewById(R.id.main_activity_ivResizeBottom);
         ivResizeBottom.setTag("ResizeBottom");
+
         btnCheckout = (Button) findViewById(R.id.header_btCheckout);
-        btnLeftMenu = (Button) findViewById(R.id.btn_left_menu);
+
+        btnRightMenu = (Button) findViewById(R.id.footer_control_btShowRightMenu);
+        btnLeftMenu = (Button) findViewById(R.id.footer_control_btShowLeftMenu);
+        btAddImage = (Button) findViewById(R.id.footer_control_btAddImage);
         btAddText = (Button) findViewById(R.id.footer_control_btAddText);
     }
 
     private void setActionListener()
     {
-        btGetImageGallery.setOnClickListener(onClickListener);
         btTakePhoto.setOnClickListener(onClickListener);
         btnCheckout.setOnClickListener(onClickListener);
+
         btnLeftMenu.setOnClickListener(onClickListener);
+        btnRightMenu.setOnClickListener(onClickListener);
+        btAddImage.setOnClickListener(onClickListener);
         btAddText.setOnClickListener(onClickListener);
     }
 
@@ -186,7 +152,11 @@ public class MyActivity extends FragmentActivity
                     Intent intent = new Intent(MyActivity.this, CheckoutActivity.class);
                     startActivityForResult(intent, CHECKOUT_CODE);
                     break;
-                case R.id.btn_left_menu:
+                case R.id.footer_control_btShowLeftMenu:
+                    showLeftMenu();
+                    break;
+                case R.id.footer_control_btShowRightMenu:
+                    showRightMenu();
                     break;
                 case R.id.footer_control_btAddText:
                     new InputDialog(new InputActionListener()
@@ -205,6 +175,60 @@ public class MyActivity extends FragmentActivity
             }
         }
     };
+
+    private void showLeftMenu()
+    {
+        if (tShirtFragment.getLlLeftMenu().getVisibility() == View.GONE)
+        {
+            tShirtFragment.getRlRootLayout().bringChildToFront(tShirtFragment.getLlLeftMenu());
+            tShirtFragment.getLlLeftMenu().setVisibility(View.VISIBLE);
+        }
+        else
+        {
+            tShirtFragment.getLlLeftMenu().setVisibility(View.GONE);
+            if (currentLayer != -1)
+            {
+                layerModels.get(currentLayer).getViewZoomer().setEnabled(true);
+            }
+        }
+    }
+
+    private void showRightMenu()
+    {
+        if (tShirtFragment.getLlRightMenu().getVisibility() == View.GONE)
+        {
+            LayerModel[] layers = new LayerModel[layerModels.size()];
+            layers = layerModels.toArray(layers);
+            LayerArrayAdapter adapter = new LayerArrayAdapter(MyActivity.this, R.id.menu_right_lvListLayer, layers);
+            lvListLayer = tShirtFragment.getLvListLayer();
+            lvListLayer.setAdapter(adapter);
+            lvListLayer.setOnItemClickListener(new AdapterView.OnItemClickListener()
+            {
+                @Override
+                public void onItemClick(AdapterView<?> adapterView, View view, int i, long l)
+                {
+                    Toast.makeText(getApplicationContext(), "item " + i, Toast.LENGTH_SHORT).show();
+                    layerModels.get(i).getViewZoomer().setEnabled(true);
+                    currentLayer = i;
+                    tShirtFragment.getLlRightMenu().setVisibility(View.GONE);
+                }
+            });
+            for (LayerModel layer : layerModels)
+            {
+                layer.getViewZoomer().setEnabled(false);
+            }
+            tShirtFragment.getRlRootLayout().bringChildToFront(tShirtFragment.getLlRightMenu());
+            tShirtFragment.getLlRightMenu().setVisibility(View.VISIBLE);
+        }
+        else
+        {
+            tShirtFragment.getLlRightMenu().setVisibility(View.GONE);
+            if (currentLayer != -1)
+            {
+                layerModels.get(currentLayer).getViewZoomer().setEnabled(true);
+            }
+        }
+    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data)
@@ -227,7 +251,8 @@ public class MyActivity extends FragmentActivity
         }
     }
 
-    private void addZoomAndModelLayout(Bitmap icon) {
+    private void addZoomAndModelLayout(Bitmap icon)
+    {
         ViewZoomer viewZoomer = new ViewZoomer(getApplicationContext(), scaleImage(icon, 70, 70));
         tShirtFragment.getRlRootLayout().addView(viewZoomer);
         currentZoomView.add(viewZoomer);
@@ -236,37 +261,77 @@ public class MyActivity extends FragmentActivity
         currentLayer = countLayer;
     }
 
-//
-//    private void actionImageShow(MotionEvent motionEvent, int x, int y)
-//    {
-//        switch (motionEvent.getAction() & MotionEvent.ACTION_MASK)
-//        {
-//            case MotionEvent.ACTION_DOWN:
-//                RelativeLayout.LayoutParams lParams = (RelativeLayout.LayoutParams) shapeLayout.getLayoutParams();
-//                _xDelta = x - lParams.leftMargin;
-//                _yDelta = y - lParams.topMargin;
-//                break;
-//            case MotionEvent.ACTION_UP:
-//                break;
-//            case MotionEvent.ACTION_POINTER_DOWN:
-//                break;
-//            case MotionEvent.ACTION_POINTER_UP:
-//                break;
-//            case MotionEvent.ACTION_MOVE:
-//                RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) shapeLayout.getLayoutParams();
-//                layoutParams.leftMargin = x - _xDelta;
-//                layoutParams.topMargin = y - _yDelta;
-//                layoutParams.rightMargin = -250;
-//                layoutParams.bottomMargin = -250;
-//                shapeLayout.setLayoutParams(layoutParams);
-//                break;
-//        }
-//        shapeLayout.invalidate();
-//    }
+    View.OnTouchListener onTouchListenerImage = new View.OnTouchListener()
+    {
+        @Override
+        public boolean onTouch(View view, MotionEvent motionEvent)
+        {
+            final int X = (int) motionEvent.getRawX();
+            final int Y = (int) motionEvent.getRawY();
+            if (view.getTag().equals("ImageShow"))
+            {
+                actionImageShow(motionEvent, X, Y);
+            }
+            return true;
+        }
+    };
+
+    private void actionImageShow(MotionEvent motionEvent, int x, int y)
+    {
+        switch (motionEvent.getAction() & MotionEvent.ACTION_MASK)
+        {
+            case MotionEvent.ACTION_DOWN:
+                RelativeLayout.LayoutParams lParams = (RelativeLayout.LayoutParams) shapeLayout.getLayoutParams();
+                _xDelta = x - lParams.leftMargin;
+                _yDelta = y - lParams.topMargin;
+                break;
+            case MotionEvent.ACTION_UP:
+                break;
+            case MotionEvent.ACTION_POINTER_DOWN:
+                break;
+            case MotionEvent.ACTION_POINTER_UP:
+                break;
+            case MotionEvent.ACTION_MOVE:
+                RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) shapeLayout.getLayoutParams();
+                layoutParams.leftMargin = x - _xDelta;
+                layoutParams.topMargin = y - _yDelta;
+                layoutParams.rightMargin = -250;
+                layoutParams.bottomMargin = -250;
+                shapeLayout.setLayoutParams(layoutParams);
+                break;
+        }
+        shapeLayout.invalidate();
+    }
+
+    private boolean onTouchShirt(View view, MotionEvent motionEvent)
+    {
+        layoutParams = (LayoutParams) view.getLayoutParams();
+        switch (motionEvent.getAction())
+        {
+            case MotionEvent.ACTION_DOWN:
+                home_x = (int) motionEvent.getRawX();
+                home_y = (int) motionEvent.getRawY();
+                break;
+            case MotionEvent.ACTION_MOVE:
+                int x_moved = (int) motionEvent.getRawX();
+                int y_moved = (int) motionEvent.getRawY();
+
+                layoutParams.leftMargin = (x_moved >= home_x) ? x_moved - home_x : home_x - x_moved;
+                layoutParams.topMargin = (y_moved >= home_y) ? y_moved - home_y : home_y - y_moved;
+
+                view.setLayoutParams(layoutParams);
+                break;
+            case MotionEvent.ACTION_UP:
+                layoutParams.leftMargin = 0;
+                layoutParams.topMargin = 0;
+                view.setLayoutParams(layoutParams);
+                break;
+        }
+        return true;
+    }
 
     public void createOrUpdateFragment(String fragmentTag)
     {
-
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         tShirtFragment = (TShirtFragment) getSupportFragmentManager().findFragmentByTag(fragmentTag);
 

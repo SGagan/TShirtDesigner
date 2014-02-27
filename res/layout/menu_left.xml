@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:id="@+id/left_menu_llRootLeftMenu"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:layout_marginRight="120dp"
+              android:background="#000000"
+              android:visibility="gone">
+    <LinearLayout
+            android:id="@+id/left_menu_btChangeColor"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/LightGrey"
+            android:layout_margin="10dp">
+        <ImageView android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:background="@drawable/button_color_default"
+                   android:layout_margin="5dp"/>
+        <TextView android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:text="Change color"
+                  android:layout_gravity="center_vertical"/>
+    </LinearLayout>
+
+    <LinearLayout
+            android:id="@+id/left_menu_btChangeText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/LightGrey"
+            android:layout_margin="10dp">
+        <ImageView android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:background="@drawable/button_change_text_default"
+                   android:layout_margin="5dp"/>
+        <TextView android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:text="Change text"
+                  android:layout_gravity="center_vertical"/>
+    </LinearLayout>
+
+    <LinearLayout
+            android:id="@+id/left_menu_btChangeFont"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/LightGrey"
+            android:layout_margin="10dp">
+        <ImageView android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:background="@drawable/button_font_default"
+                   android:layout_margin="5dp"/>
+        <TextView android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:text="Change font"
+                  android:layout_gravity="center_vertical"/>
+    </LinearLayout>
+</LinearLayout>

@@ -32,6 +32,7 @@ public class TShirtFragment extends Fragment
     RelativeLayout rlRootLayout;
     ImageView ivShirt;
     LinearLayout llRightMenu;
+    LinearLayout llLeftMenu;
     GridView gvColorChooser;
     String colors = "white";
     public int tShirtDirection;
@@ -55,6 +56,7 @@ public class TShirtFragment extends Fragment
 
         //right menu
         llRightMenu = (LinearLayout) rlRootLayout.findViewById(R.id.right_menu_llRoot);
+        llLeftMenu = (LinearLayout) rlRootLayout.findViewById(R.id.left_menu_llRootLeftMenu);
         gvColorChooser = (GridView) rlRootLayout.findViewById(R.id.right_menu_gvColorChooser);
 
         gvColorChooser.setAdapter(new GridViewAdapter(getActivity(), new ColorChooserInterface()
@@ -106,6 +108,11 @@ public class TShirtFragment extends Fragment
     public LinearLayout getLlRightMenu()
     {
         return llRightMenu;
+    }
+
+    public LinearLayout getLlLeftMenu()
+    {
+        return llLeftMenu;
     }
 
     private void showDirectionTShirt()

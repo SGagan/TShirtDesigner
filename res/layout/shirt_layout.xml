@@ -13,4 +13,5 @@
             android:layout_centerInParent="true"/>
     <!--add Text or image here-->
     <include layout="@layout/menu_right"/>
+    <include layout="@layout/menu_left"/>
 </RelativeLayout>
