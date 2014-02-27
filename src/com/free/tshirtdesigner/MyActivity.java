@@ -125,7 +125,7 @@ public class MyActivity extends FragmentActivity
                     {
                         layer.getViewZoomer().setEnabled(false);
                     }
-                    tShirtFragment.getRlRootLayout().bringToFront();
+                    tShirtFragment.getRlRootLayout().bringChildToFront(tShirtFragment.getLlRightMenu());
                     tShirtFragment.getLlRightMenu().setVisibility(View.VISIBLE);
                 }
                 else
