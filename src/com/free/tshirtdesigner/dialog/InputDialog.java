@@ -1,8 +1,8 @@
 package com.free.tshirtdesigner.dialog;
 
-import android.app.DialogFragment;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.*;

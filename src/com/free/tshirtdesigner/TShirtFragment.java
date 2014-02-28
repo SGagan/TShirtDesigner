@@ -6,20 +6,15 @@ import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.v4.app.Fragment;
-import android.view.LayoutInflater;
-import android.view.MotionEvent;
-import android.view.View;
-import android.view.ViewGroup;
+import android.view.*;
 import android.widget.*;
-import com.free.tshirtdesigner.action.ColorChooserInterface;
+import com.free.tshirtdesigner.action.*;
 import com.free.tshirtdesigner.adapter.GridViewAdapter;
+import com.free.tshirtdesigner.dialog.InputDialog;
 import com.free.tshirtdesigner.util.UtilImage;
 import com.free.tshirtdesigner.util.UtilResource;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.util.List;
 
 /**
@@ -38,6 +33,12 @@ public class TShirtFragment extends Fragment
     public int tShirtDirection;
     String sideTag;
     private ListView lvListLayer;
+
+    private LinearLayout llChangeColor;
+    private LinearLayout llChangeText;
+    private LinearLayout llChangeFont;
+
+    private TextChangeListener textChangeListener;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
@@ -58,6 +59,7 @@ public class TShirtFragment extends Fragment
         llRightMenu = (LinearLayout) rlRootLayout.findViewById(R.id.right_menu_llRoot);
         llLeftMenu = (LinearLayout) rlRootLayout.findViewById(R.id.left_menu_llRootLeftMenu);
         gvColorChooser = (GridView) rlRootLayout.findViewById(R.id.right_menu_gvColorChooser);
+        lvListLayer = (ListView) rlRootLayout.findViewById(R.id.menu_right_lvListLayer);
 
         gvColorChooser.setAdapter(new GridViewAdapter(getActivity(), new ColorChooserInterface()
         {
@@ -72,8 +74,6 @@ public class TShirtFragment extends Fragment
             }
         }));
 
-        lvListLayer = (ListView) rlRootLayout.findViewById(R.id.menu_right_lvListLayer);
-
         showDirectionTShirt();
         // get old view
         List<View> viewList = getMainActivity().getView(sideTag);
@@ -87,8 +87,46 @@ public class TShirtFragment extends Fragment
 
 
         }
+
+        // left menu
+        llChangeColor = (LinearLayout) rlRootLayout.findViewById(R.id.left_menu_btChangeColor);
+        llChangeText = (LinearLayout) rlRootLayout.findViewById(R.id.left_menu_btChangeText);
+        llChangeFont = (LinearLayout) rlRootLayout.findViewById(R.id.left_menu_btChangeFont);
+
+        llChangeColor.setOnClickListener(onClickListener);
+        llChangeText.setOnClickListener(onClickListener);
+        llChangeFont.setOnClickListener(onClickListener);
+
         return rlRootLayout;
     }
+
+    public View.OnClickListener onClickListener = new View.OnClickListener()
+    {
+        @Override
+        public void onClick(View view)
+        {
+            llLeftMenu.setVisibility(View.GONE);
+            switch (view.getId())
+            {
+                case R.id.left_menu_btChangeColor:
+                    textChangeListener.changeColor("fuck shit");
+                    break;
+                case R.id.left_menu_btChangeText:
+                    new InputDialog(new InputActionListener()
+                    {
+                        @Override
+                        public void onSubmit(String result)
+                        {
+                            textChangeListener.changeText(result);
+                        }
+                    }).show(getActivity().getSupportFragmentManager().beginTransaction(), "InputDialog");
+                    break;
+                case R.id.left_menu_btChangeFont:
+                    textChangeListener.changeFont("vai font");
+                    break;
+            }
+        }
+    };
 
     public RelativeLayout getRlRootLayout()
     {
@@ -113,6 +151,11 @@ public class TShirtFragment extends Fragment
     public LinearLayout getLlLeftMenu()
     {
         return llLeftMenu;
+    }
+
+    public void setTextChangeListener(TextChangeListener textChangeListener)
+    {
+        this.textChangeListener = textChangeListener;
     }
 
     private void showDirectionTShirt()

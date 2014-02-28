@@ -8,10 +8,10 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
-import android.view.MotionEvent;
-import android.view.View;
+import android.view.*;
 import android.widget.*;
 import com.free.tshirtdesigner.action.InputActionListener;
+import com.free.tshirtdesigner.action.TextChangeListener;
 import com.free.tshirtdesigner.adapter.LayerArrayAdapter;
 import com.free.tshirtdesigner.dialog.InputDialog;
 import com.free.tshirtdesigner.model.LayerModel;
@@ -19,16 +19,13 @@ import com.free.tshirtdesigner.util.UtilImage;
 import com.free.tshirtdesigner.util.setting.ConstantValue;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static android.widget.RelativeLayout.LayoutParams;
 
 public class MyActivity extends FragmentActivity
 {
-    boolean exist=false;
+    boolean exist = false;
     private static final int CHECKOUT_CODE = 100;
     private int home_x, home_y;
     private LayoutParams layoutParams;
@@ -165,13 +162,14 @@ public class MyActivity extends FragmentActivity
                         @Override
                         public void onSubmit(String result)
                         {
-                            ViewZoomer viewZoomer = new ViewZoomer(getApplicationContext(), result);
+                            ViewZoomer viewZoomer = new ViewZoomer(getApplicationContext(), result, null, null);
                             currentZoomView.add(viewZoomer);
                             tShirtFragment.getRlRootLayout().addView(viewZoomer);
                             layerModels.add(new LayerModel(countLayer++, ConstantValue.TEXT_ITEM_TYPE, result, viewZoomer));
                             currentLayer = countLayer;
+                            btnLeftMenu.setEnabled(true);
                         }
-                    }).show(getFragmentManager(), "InputDialog");
+                    }).show(getSupportFragmentManager().beginTransaction(), "InputDialog");
                     break;
             }
         }
@@ -183,6 +181,73 @@ public class MyActivity extends FragmentActivity
         {
             tShirtFragment.getRlRootLayout().bringChildToFront(tShirtFragment.getLlLeftMenu());
             tShirtFragment.getLlLeftMenu().setVisibility(View.VISIBLE);
+
+            tShirtFragment.setTextChangeListener(new TextChangeListener()
+            {
+                @Override
+                public void changeColor(String color)
+                {
+//                    ViewZoomer oldView = layerModels.get(currentLayer).getViewZoomer();
+//
+//                    String text = oldView.getText();
+//                    ViewZoomer viewZoomer = new ViewZoomer(getApplicationContext(), text, Color.RED, oldView.getFontDefault());
+//                    viewZoomer.setmPosX(oldView.getmPosX());
+//                    viewZoomer.setmPosY(oldView.getmPosY());
+//                    viewZoomer.setmScaleFactor(oldView.getmScaleFactor());
+//
+//                    currentZoomView.set(currentLayer, viewZoomer);
+//                    tShirtFragment.getRlRootLayout().removeView(oldView);
+//                    tShirtFragment.getRlRootLayout().addView(viewZoomer);
+//
+//                    layerModels.set(currentLayer, new LayerModel(countLayer++, ConstantValue.TEXT_ITEM_TYPE, text, viewZoomer));
+                    PopupMenu popup = new PopupMenu(MyActivity.this, btnCheckout);
+                    popup.getMenuInflater().inflate(R.menu.popup_menu, popup.getMenu());
+                    popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener()
+                    {
+                        public boolean onMenuItemClick(MenuItem item)
+                        {
+                            Toast.makeText(MyActivity.this, "You Clicked : " + item.getTitle(), Toast.LENGTH_SHORT).show();
+                            return true;
+                        }
+                    });
+                    popup.show();
+                }
+
+                @Override
+                public void changeText(String text)
+                {
+                    ViewZoomer oldView = layerModels.get(currentLayer).getViewZoomer();
+
+                    ViewZoomer viewZoomer = new ViewZoomer(getApplicationContext(), text, oldView.getColorDefault(), oldView.getFontDefault());
+                    viewZoomer.setmPosX(oldView.getmPosX());
+                    viewZoomer.setmPosY(oldView.getmPosY());
+                    viewZoomer.setmScaleFactor(oldView.getmScaleFactor());
+
+                    currentZoomView.set(currentLayer, viewZoomer);
+                    tShirtFragment.getRlRootLayout().removeView(oldView);
+                    tShirtFragment.getRlRootLayout().addView(viewZoomer);
+
+                    layerModels.set(currentLayer, new LayerModel(countLayer++, ConstantValue.TEXT_ITEM_TYPE, text, viewZoomer));
+                }
+
+                @Override
+                public void changeFont(String font)
+                {
+                    ViewZoomer oldView = layerModels.get(currentLayer).getViewZoomer();
+
+                    String text = oldView.getText();
+                    ViewZoomer viewZoomer = new ViewZoomer(getApplicationContext(), text, oldView.getColorDefault(), "chunk.ttf");
+                    viewZoomer.setmPosX(oldView.getmPosX());
+                    viewZoomer.setmPosY(oldView.getmPosY());
+                    viewZoomer.setmScaleFactor(oldView.getmScaleFactor());
+
+                    currentZoomView.set(currentLayer, viewZoomer);
+                    tShirtFragment.getRlRootLayout().removeView(oldView);
+                    tShirtFragment.getRlRootLayout().addView(viewZoomer);
+
+                    layerModels.set(currentLayer, new LayerModel(countLayer++, ConstantValue.TEXT_ITEM_TYPE, text, viewZoomer));
+                }
+            });
         }
         else
         {
@@ -212,6 +277,14 @@ public class MyActivity extends FragmentActivity
                     layerModels.get(i).getViewZoomer().setEnabled(true);
                     currentLayer = i;
                     tShirtFragment.getLlRightMenu().setVisibility(View.GONE);
+                    if (layerModels.get(i).getType() == ConstantValue.TEXT_ITEM_TYPE)
+                    {
+                        btnLeftMenu.setEnabled(true);
+                    }
+                    if (layerModels.get(i).getType() == ConstantValue.IMAGE_ITEM_TYPE)
+                    {
+                        btnLeftMenu.setEnabled(false);
+                    }
                 }
             });
             for (LayerModel layer : layerModels)
@@ -260,6 +333,7 @@ public class MyActivity extends FragmentActivity
         String name = getResources().getResourceEntryName(R.drawable.bt_red_popup_small);
         layerModels.add(new LayerModel(countLayer++, ConstantValue.IMAGE_ITEM_TYPE, name, viewZoomer));
         currentLayer = countLayer;
+        btnLeftMenu.setEnabled(false);
     }
 
     private boolean onTouchShirt(View view, MotionEvent motionEvent)
@@ -370,8 +444,9 @@ public class MyActivity extends FragmentActivity
     }
 
     @Override
-    public void onBackPressed() {
-        if(exist)
+    public void onBackPressed()
+    {
+        if (exist)
         {
             Intent startMain = new Intent(Intent.ACTION_MAIN);
             startMain.addCategory(Intent.CATEGORY_HOME);
@@ -380,8 +455,8 @@ public class MyActivity extends FragmentActivity
         }
         else
         {
-            exist=true;
-            Toast.makeText(this,"Back press a time to exist", Toast.LENGTH_SHORT).show();
+            exist = true;
+            Toast.makeText(this, "Back press a time to exist", Toast.LENGTH_SHORT).show();
         }
     }
 }

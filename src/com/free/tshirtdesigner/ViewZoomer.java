@@ -1,14 +1,9 @@
 package com.free.tshirtdesigner;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.view.LayoutInflater;
-import android.view.MotionEvent;
-import android.view.View;
-import android.widget.ImageView;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
+import android.graphics.*;
+import android.view.*;
+import android.widget.*;
 
 import static android.widget.RelativeLayout.LayoutParams.WRAP_CONTENT;
 
@@ -20,20 +15,31 @@ public class ViewZoomer extends View
     private float mPosX;
     private float mPosY;
     private Bitmap bitmap;
+    private Context context;
+    private Integer colorDefault = Color.BLACK;
+    private String fontDefault = "gtw.ttf";
 
     private VersionedGestureDetector mDetector;
 
     private float mScaleFactor = 1.f;
 
-    public ViewZoomer(Context context, String text)
+    public ViewZoomer(Context context, String text, Integer color, String font)
     {
         super(context);
+        this.context = context;
         LayoutInflater layoutInflater = LayoutInflater.from(context);
         rlContent = (RelativeLayout) layoutInflater.inflate(R.layout.text_item, null);
         rlContent.setLayoutParams(new RelativeLayout.LayoutParams(WRAP_CONTENT, WRAP_CONTENT));
 
         mText = (TextView) rlContent.findViewById(R.id.item_tvText);
         mText.setText(text);
+
+        colorDefault = (color == null) ? colorDefault : color;
+        mText.setTextColor(colorDefault);
+
+        fontDefault = (font == null) ? fontDefault : font;
+        Typeface fontsStyle = Typeface.createFromAsset(context.getAssets(), "fonts/" + fontDefault);
+        mText.setTypeface(fontsStyle);
 
         int measureWidth = View.MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED);
         int measuredHeight = View.MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED);
@@ -88,7 +94,6 @@ public class ViewZoomer extends View
         rlContent.draw(canvas);
 
         canvas.restore();
-//        mImage.setImageBitmap(bitmap);
     }
 
     private class GestureCallback implements VersionedGestureDetector.OnGestureListener
@@ -106,5 +111,60 @@ public class ViewZoomer extends View
             mScaleFactor = Math.max(0.1f, Math.min(mScaleFactor, 5.0f));
             invalidate();
         }
+    }
+
+    public float getmPosX()
+    {
+        return mPosX;
+    }
+
+    public void setmPosX(float mPosX)
+    {
+        this.mPosX = mPosX;
+    }
+
+    public float getmPosY()
+    {
+        return mPosY;
+    }
+
+    public void setmPosY(float mPosY)
+    {
+        this.mPosY = mPosY;
+    }
+
+    public float getmScaleFactor()
+    {
+        return mScaleFactor;
+    }
+
+    public void setmScaleFactor(float mScaleFactor)
+    {
+        this.mScaleFactor = mScaleFactor;
+    }
+
+    public Integer getColorDefault()
+    {
+        return colorDefault;
+    }
+
+    public void setColorDefault(Integer colorDefault)
+    {
+        this.colorDefault = colorDefault;
+    }
+
+    public String getFontDefault()
+    {
+        return fontDefault;
+    }
+
+    public void setFontDefault(String fontDefault)
+    {
+        this.fontDefault = fontDefault;
+    }
+
+    public String getText()
+    {
+        return mText.getText().toString();
     }
 }
