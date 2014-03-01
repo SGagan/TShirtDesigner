@@ -1,9 +1,16 @@
 package com.free.tshirtdesigner;
 
 import android.content.Context;
-import android.graphics.*;
-import android.view.*;
-import android.widget.*;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Typeface;
+import android.view.LayoutInflater;
+import android.view.MotionEvent;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import static android.widget.RelativeLayout.LayoutParams.WRAP_CONTENT;
 
@@ -166,5 +173,15 @@ public class ViewZoomer extends View
     public String getText()
     {
         return mText.getText().toString();
+    }
+
+    public void setBackground()
+    {
+        rlContent.setBackgroundResource(R.drawable.item_background);
+    }
+
+    public void setBackgroundNull()
+    {
+        rlContent.setBackgroundDrawable(null);
     }
 }
