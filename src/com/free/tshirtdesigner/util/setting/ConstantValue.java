@@ -1,5 +1,10 @@
 package com.free.tshirtdesigner.util.setting;
 
+import android.graphics.Color;
+
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * User: Admin
  * Date: 2/25/14
@@ -7,19 +12,41 @@ package com.free.tshirtdesigner.util.setting;
  */
 public class ConstantValue
 {
-    public static final String CALEDO_BOLD = "caledo_bold.otf";
-    public static final String CHUNK = "chunk.tff";
-    public static final String GTW = "gtw.tff";
-    public static final String HOBBY_OF_NIGHT = "hobby_of_night.tff";
-    public static final String JUNCTION = "junction.tff";
-    public static final String KNEWAVE = "knewave.tff";
-    public static final String LINDEN_HILL = "linden_hill.otf";
-    public static final String ORBITRON_BOLD = "orbitron_bold.tff";
-    public static final String OSTRICH_ROUNDED = "ostrich_rounded.tff";
-
     public static final int TEXT_ITEM_TYPE = 0;
     public static final int IMAGE_ITEM_TYPE = 1;
 
     public static final int PICK_FROM_FILE = 777;
     public static final int CAPTURE_PICTURE = 999;
+
+    public static final Map<String, Integer> COLORS = new HashMap<String, Integer>()
+    {
+        {
+            put("Black", Color.BLACK);
+            put("Red", Color.RED);
+            put("Green", Color.GREEN);
+            put("Yellow", Color.YELLOW);
+            put("Blue", Color.BLUE);
+            put("White", Color.WHITE);
+            put("Gray", Color.GRAY);
+            put("LightGray", Color.LTGRAY);
+            put("DarkGray", Color.DKGRAY);
+            put("Cyan", Color.CYAN);
+            put("Magenta", Color.MAGENTA);
+        }
+    };
+
+    public static final Map<String, String> FONTS = new HashMap<String, String>()
+    {
+        {
+            put("Caledo_bold", "caledo_bold.otf");
+            put("Chunk", "chunk.ttf");
+            put("Gtw", "gtw.ttf");
+            put("Hobby_of_night", "hobby_of_night.ttf");
+            put("Junction", "junction.otf");
+            put("Knewave", "knewave.ttf");
+            put("Linden_hill", "linden_hill.otf");
+            put("Orbitron_bold", "orbitron_bold.ttf");
+            put("Ostrich_rounded", "ostrich_rounded.ttf");
+        }
+    };
 }

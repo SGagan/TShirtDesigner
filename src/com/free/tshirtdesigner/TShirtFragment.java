@@ -6,15 +6,23 @@ import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.v4.app.Fragment;
-import android.view.*;
+import android.view.LayoutInflater;
+import android.view.MotionEvent;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.*;
-import com.free.tshirtdesigner.action.*;
+import com.free.tshirtdesigner.action.ColorChooserInterface;
+import com.free.tshirtdesigner.action.InputActionListener;
+import com.free.tshirtdesigner.action.TextChangeListener;
 import com.free.tshirtdesigner.adapter.GridViewAdapter;
 import com.free.tshirtdesigner.dialog.InputDialog;
 import com.free.tshirtdesigner.util.UtilImage;
 import com.free.tshirtdesigner.util.UtilResource;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -109,6 +117,7 @@ public class TShirtFragment extends Fragment
             switch (view.getId())
             {
                 case R.id.left_menu_btChangeColor:
+
                     textChangeListener.changeColor("fuck shit");
                     break;
                 case R.id.left_menu_btChangeText:
