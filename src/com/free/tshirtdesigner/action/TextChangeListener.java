@@ -7,9 +7,9 @@ package com.free.tshirtdesigner.action;
  */
 public interface TextChangeListener
 {
-    public void changeColor(String color);
+    public void changeColor();
 
     public void changeText(String text);
 
-    public void changeFont(String font);
+    public void changeFont();
 }

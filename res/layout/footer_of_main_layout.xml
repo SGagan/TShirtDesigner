@@ -14,40 +14,6 @@
     <LinearLayout android:layout_width="wrap_content"
                   android:layout_height="wrap_content"
                   android:orientation="vertical">
-        <RadioGroup android:id="@+id/rgShirtViewType"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_gravity="center_horizontal">
-            <RadioButton android:id="@+id/rbLeftSide"
-                         android:layout_width="wrap_content"
-                         android:layout_height="wrap_content"
-                         android:button="@null"
-                         android:background="@drawable/left_of_shirt_background"
-                         android:layout_marginLeft="@dimen/small_margin_size"
-                         android:layout_marginRight="@dimen/small_margin_size"/>
-            <RadioButton android:id="@+id/rbBackSide"
-                         android:layout_width="wrap_content"
-                         android:layout_height="wrap_content"
-                         android:button="@null"
-                         android:background="@drawable/back_of_shirt_background"
-                         android:layout_marginLeft="@dimen/small_margin_size"
-                         android:layout_marginRight="@dimen/small_margin_size"/>
-            <RadioButton android:id="@+id/rbFrontSide"
-                         android:layout_width="wrap_content"
-                         android:layout_height="wrap_content"
-                         android:button="@null"
-                         android:background="@drawable/front_of_shirt_background"
-                         android:layout_marginLeft="@dimen/small_margin_size"
-                         android:layout_marginRight="@dimen/small_margin_size"/>
-            <RadioButton android:id="@+id/rbRightSide"
-                         android:layout_width="wrap_content"
-                         android:layout_height="wrap_content"
-                         android:button="@null"
-                         android:background="@drawable/right_of_shirt_background"
-                         android:layout_marginLeft="@dimen/small_margin_size"
-                         android:layout_marginRight="@dimen/small_margin_size"/>
-        </RadioGroup>
         <LinearLayout android:layout_width="wrap_content"
                       android:layout_height="wrap_content"
                       android:layout_gravity="center_horizontal">
@@ -60,15 +26,21 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@drawable/add_image_background"/>
-            <Button
+        </LinearLayout>
+        <LinearLayout android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:layout_gravity="center_horizontal">
+            <Button android:id="@+id/footer_control_btRotateLeft"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/add_circle_background"/>
+                    android:background="@drawable/button_rotate_cc_default"
+                    android:onClick="rotateLeft"/>
             <Button
-                    android:id="@+id/footer_control_btTakePhoto"
+                    android:id="@+id/footer_control_btRotateRight"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/add_rectangle_background"/>
+                    android:background="@drawable/button_rotate_c_default"
+                    android:onClick="rotateRight"/>
         </LinearLayout>
     </LinearLayout>
     <Button
@@ -77,4 +49,11 @@
             android:layout_height="wrap_content"
             android:background="@drawable/right_setting_background"
             android:layout_gravity="center_vertical"/>
+    <Button android:id="@+id/shirt_layout_btnEditAble"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/edit_layer_button_background"
+            android:onClick="changeToEditAble"
+            android:layout_gravity="center"
+            android:layout_marginLeft="20dp"/>
 </LinearLayout>

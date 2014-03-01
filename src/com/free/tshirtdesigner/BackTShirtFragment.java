@@ -19,6 +19,4 @@ public class BackTShirtFragment extends TShirtFragment
         sideTag = MyActivity.BACK_TAG;
         return super.onCreateView(inflater, container, savedInstanceState);
     }
-
-
 }

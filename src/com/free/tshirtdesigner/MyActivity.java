@@ -34,7 +34,6 @@ public class MyActivity extends FragmentActivity
     private static final int CHECKOUT_CODE = 100;
     private int home_x, home_y;
     private LayoutParams layoutParams;
-    private Button btTakePhoto;
     private Button btAddImage;
     private RelativeLayout shapeLayout;
     private ImageView ivImageShow;
@@ -51,11 +50,10 @@ public class MyActivity extends FragmentActivity
     private int tShirtDirection;
     private int _yDelta;
     private int _xDelta;
-    public static final String FRONT_TAG = "FRONT";
-    public static final String LEFT_TAG = "LEFT";
-    public static final String RIGHT_TAG = "RIGHT";
-    public static final String BACK_TAG = "BACK";
-
+    public static final int FRONT_TAG = 0;
+    public static final int RIGHT_TAG = 1;
+    public static final int BACK_TAG = 2;
+    public static final int LEFT_TAG = 3;
 
     TShirtFragment tShirtFragment;
     private int countLayer = -1;
@@ -64,7 +62,7 @@ public class MyActivity extends FragmentActivity
     private List<LayerModel> layerModels = new ArrayList<LayerModel>();
     Map<String, List<View>> zoomViewsMap = new HashMap<String, List<View>>();
     List<View> currentZoomView = new ArrayList<View>();
-    public String currentSide;
+    public int currentSide;
 
     @Override
     public void onCreate(Bundle savedInstanceState)
@@ -77,39 +75,31 @@ public class MyActivity extends FragmentActivity
 
         setUpViewById();
         setActionListener();
+    }
 
-        // footer controller
-        RadioGroup rgShirtViewType = (RadioGroup) findViewById(R.id.rgShirtViewType);
-        rgShirtViewType.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener()
+    public void rotateLeft(View view)
+    {
+        currentSide++;
+        if (currentSide > LEFT_TAG)
         {
-            public void onCheckedChanged(RadioGroup group, int checkedId)
-            {
-                switch (group.getCheckedRadioButtonId())
-                {
-                    case R.id.rbLeftSide:
-                        createOrUpdateFragment(LEFT_TAG);
-                        break;
-                    case R.id.rbBackSide:
-                        createOrUpdateFragment(BACK_TAG);
-                        break;
-                    case R.id.rbFrontSide:
-                        createOrUpdateFragment(FRONT_TAG);
-                        break;
-                    case R.id.rbRightSide:
-                        createOrUpdateFragment(RIGHT_TAG);
-                        break;
-                }
-            }
-        });
+            currentSide = FRONT_TAG;
+        }
+        createOrUpdateFragment(currentSide);
+    }
 
-        RadioButton rbFront = (RadioButton) findViewById(R.id.rbFrontSide);
-        rbFront.setChecked(true);
+    public void rotateRight(View view)
+    {
+        currentSide--;
+        if (currentSide < FRONT_TAG)
+        {
+            currentSide = LEFT_TAG;
+        }
+        createOrUpdateFragment(currentSide);
     }
 
     private void setUpViewById()
     {
         shapeLayout = (RelativeLayout) getLayoutInflater().inflate(R.layout.shape_layout, null);
-        btTakePhoto = (Button) findViewById(R.id.footer_control_btTakePhoto);
         ivImageShow = (ImageView) shapeLayout.findViewById(R.id.main_activity_ivImage);
         ivImageShow.setTag("ImageShow");
         ivResizeTop = (ImageView) shapeLayout.findViewById(R.id.main_activity_ivResizeTop);
@@ -129,7 +119,6 @@ public class MyActivity extends FragmentActivity
 
     private void setActionListener()
     {
-        btTakePhoto.setOnClickListener(onClickListener);
         btnCheckout.setOnClickListener(onClickListener);
 
         btnLeftMenu.setOnClickListener(onClickListener);
@@ -146,14 +135,24 @@ public class MyActivity extends FragmentActivity
             switch (view.getId())
             {
                 case R.id.footer_control_btAddImage:
-                    Intent intentGallery = new Intent();
-                    intentGallery.setType("image/*");
-                    intentGallery.setAction(Intent.ACTION_GET_CONTENT);
-                    startActivityForResult(Intent.createChooser(intentGallery, "Complete action using"), ConstantValue.PICK_FROM_FILE);
-                    break;
-                case R.id.footer_control_btTakePhoto:
-                    Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-                    startActivityForResult(cameraIntent, ConstantValue.CAPTURE_PICTURE);
+                    PopupMenu popup = new PopupMenu(MyActivity.this, btAddImage);
+                    popup.getMenuInflater().inflate(R.menu.image_popup_menu, popup.getMenu());
+                    popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener()
+                    {
+                        public boolean onMenuItemClick(MenuItem item)
+                        {
+                            if (item.getTitle().equals("TAKE PICTURE"))
+                            {
+                                takeNewImage();
+                            }
+                            if (item.getTitle().equals("CHOOSE FILE"))
+                            {
+                                chooseImageFile();
+                            }
+                            return true;
+                        }
+                    });
+                    popup.show();
                     break;
                 case R.id.header_btCheckout:
                     Intent intent = new Intent(MyActivity.this, CheckoutActivity.class);
@@ -188,6 +187,20 @@ public class MyActivity extends FragmentActivity
         }
     };
 
+    private void takeNewImage()
+    {
+        Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+        startActivityForResult(cameraIntent, ConstantValue.CAPTURE_PICTURE);
+    }
+
+    private void chooseImageFile()
+    {
+        Intent intentGallery = new Intent();
+        intentGallery.setType("image/*");
+        intentGallery.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(Intent.createChooser(intentGallery, "Complete action using"), ConstantValue.PICK_FROM_FILE);
+    }
+
     private void showLeftMenu()
     {
         if (tShirtFragment.getLlLeftMenu().getVisibility() == View.GONE)
@@ -202,7 +215,7 @@ public class MyActivity extends FragmentActivity
             tShirtFragment.setTextChangeListener(new TextChangeListener()
             {
                 @Override
-                public void changeColor(String color)
+                public void changeColor()
                 {
                     PopupMenu popup = new PopupMenu(MyActivity.this, btnQuantity);
                     popup.getMenuInflater().inflate(R.menu.color_popup_menu, popup.getMenu());
@@ -248,7 +261,7 @@ public class MyActivity extends FragmentActivity
                 }
 
                 @Override
-                public void changeFont(String font)
+                public void changeFont()
                 {
                     PopupMenu popup = new PopupMenu(MyActivity.this, btnQuantity);
                     popup.getMenuInflater().inflate(R.menu.font_popup_menu, popup.getMenu());
@@ -337,6 +350,16 @@ public class MyActivity extends FragmentActivity
         }
     }
 
+    public void changeToEditAble(View view)
+    {
+        for (LayerModel layer : layerModels)
+        {
+            layer.getViewZoomer().setEnabled(false);
+            layer.getViewZoomer().setBackgroundNull();
+        }
+    }
+
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data)
     {
@@ -406,16 +429,16 @@ public class MyActivity extends FragmentActivity
         return true;
     }
 
-    public void createOrUpdateFragment(String fragmentTag)
+    public void createOrUpdateFragment(int fragmentTag)
     {
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        tShirtFragment = (TShirtFragment) getSupportFragmentManager().findFragmentByTag(fragmentTag);
+        tShirtFragment = (TShirtFragment) getSupportFragmentManager().findFragmentByTag(String.valueOf(fragmentTag));
 
         if (tShirtFragment == null)
         {
             createNewFragment(fragmentTag);
             tShirtFragment.setRetainInstance(true);
-            ft.replace(R.id.embed_shirt, tShirtFragment, fragmentTag).addToBackStack(null);
+            ft.replace(R.id.embed_shirt, tShirtFragment, String.valueOf(fragmentTag)).addToBackStack(null);
             ft.commit();
         }
         else
@@ -425,21 +448,21 @@ public class MyActivity extends FragmentActivity
         }
     }
 
-    private void createNewFragment(String fragmentTag)
+    private void createNewFragment(int fragmentTag)
     {
-        if (fragmentTag.equals(LEFT_TAG))
+        if (fragmentTag == LEFT_TAG)
         {
             tShirtFragment = new LeftTShirtFragment();
         }
-        else if (fragmentTag.equals(FRONT_TAG))
+        else if (fragmentTag == FRONT_TAG)
         {
             tShirtFragment = new FrontTShirtFragment();
         }
-        else if (fragmentTag.equals(BACK_TAG))
+        else if (fragmentTag == BACK_TAG)
         {
             tShirtFragment = new BackTShirtFragment();
         }
-        else if (fragmentTag.equals(RIGHT_TAG))
+        else if (fragmentTag == RIGHT_TAG)
         {
             tShirtFragment = new RightTShirtFragment();
         }

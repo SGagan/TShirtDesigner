@@ -39,7 +39,7 @@ public class TShirtFragment extends Fragment
     GridView gvColorChooser;
     String colors = "white";
     public int tShirtDirection;
-    String sideTag;
+    int sideTag;
     private ListView lvListLayer;
 
     private LinearLayout llChangeColor;
@@ -84,7 +84,7 @@ public class TShirtFragment extends Fragment
 
         showDirectionTShirt();
         // get old view
-        List<View> viewList = getMainActivity().getView(sideTag);
+        List<View> viewList = getMainActivity().getView(String.valueOf(sideTag));
         if (viewList != null && viewList.size() > 0)
         {
             for (View zoomView : viewList)
@@ -118,7 +118,7 @@ public class TShirtFragment extends Fragment
             {
                 case R.id.left_menu_btChangeColor:
 
-                    textChangeListener.changeColor("fuck shit");
+                    textChangeListener.changeColor();
                     break;
                 case R.id.left_menu_btChangeText:
                     new InputDialog(new InputActionListener()
@@ -131,7 +131,7 @@ public class TShirtFragment extends Fragment
                     }).show(getActivity().getSupportFragmentManager().beginTransaction(), "InputDialog");
                     break;
                 case R.id.left_menu_btChangeFont:
-                    textChangeListener.changeFont("vai font");
+                    textChangeListener.changeFont();
                     break;
             }
         }
@@ -219,7 +219,7 @@ public class TShirtFragment extends Fragment
         {
             rlRootLayout.removeAllViewsInLayout();
         }
-        getMainActivity().saveState(sideTag);
+        getMainActivity().saveState(String.valueOf(sideTag));
     }
 
     public MyActivity getMainActivity()
