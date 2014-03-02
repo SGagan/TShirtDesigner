@@ -71,16 +71,6 @@ public class UtilImage
 
     public static Bitmap scaleImage(Bitmap bitmap, float maxWidth, float maxHeight)
     {
-//        int widthBitmap = bitmap.getWidth();
-//        int heightBitmap = bitmap.getHeight();
-//        if (widthBitmap > heightBitmap)
-//        {
-//            return Bitmap.createScaledBitmap(bitmap, 200, heightBitmap * 200 / widthBitmap, true);
-//        }
-//        else
-//        {
-//            return Bitmap.createScaledBitmap(bitmap, widthBitmap*200/heightBitmap, 200, true);
-//        }
         double ratioX = (double)maxWidth / bitmap.getWidth();
         double ratioY = (double)maxHeight / bitmap.getHeight();
         double ratio = Math.min(ratioX, ratioY);
@@ -89,7 +79,6 @@ public class UtilImage
         int newHeight = (int)(bitmap.getHeight() * ratio);
 
         return  Bitmap.createScaledBitmap(bitmap, newWidth, newHeight, true);
-
     }
 
 }

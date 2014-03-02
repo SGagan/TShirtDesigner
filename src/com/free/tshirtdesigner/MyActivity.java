@@ -9,7 +9,6 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.*;
 import com.free.tshirtdesigner.action.InputActionListener;
@@ -26,19 +25,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static android.widget.RelativeLayout.LayoutParams;
-
-public class MyActivity extends FragmentActivity
-{
+public class MyActivity extends FragmentActivity {
     boolean exist = false;
     private static final int CHECKOUT_CODE = 100;
-    private int home_x, home_y;
-    private LayoutParams layoutParams;
     private Button btAddImage;
-    private RelativeLayout shapeLayout;
-    private ImageView ivImageShow;
-    private ImageView ivResizeBottom;
-    private ImageView ivResizeTop;
     //    private RelativeLayout rlRootLayout;
     private Button btnCheckout;
     private Button btnQuantity;
@@ -46,10 +36,6 @@ public class MyActivity extends FragmentActivity
     private Button btnLeftMenu;
     private Button btnRightMenu;
     private Button btAddText;
-
-    private int tShirtDirection;
-    private int _yDelta;
-    private int _xDelta;
     public static final int FRONT_TAG = 0;
     public static final int RIGHT_TAG = 1;
     public static final int BACK_TAG = 2;
@@ -65,8 +51,7 @@ public class MyActivity extends FragmentActivity
     public int currentSide;
 
     @Override
-    public void onCreate(Bundle savedInstanceState)
-    {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
 
@@ -77,36 +62,38 @@ public class MyActivity extends FragmentActivity
         setActionListener();
     }
 
-    public void rotateLeft(View view)
-    {
+    public void rotateLeft(View view) {
         currentSide++;
-        if (currentSide > LEFT_TAG)
-        {
+        if (currentSide > LEFT_TAG) {
             currentSide = FRONT_TAG;
         }
         createOrUpdateFragment(currentSide);
     }
 
-    public void rotateRight(View view)
-    {
+    public void rotateRight(View view) {
         currentSide--;
-        if (currentSide < FRONT_TAG)
-        {
+        if (currentSide < FRONT_TAG) {
             currentSide = LEFT_TAG;
         }
         createOrUpdateFragment(currentSide);
     }
 
-    private void setUpViewById()
-    {
-        shapeLayout = (RelativeLayout) getLayoutInflater().inflate(R.layout.shape_layout, null);
-        ivImageShow = (ImageView) shapeLayout.findViewById(R.id.main_activity_ivImage);
-        ivImageShow.setTag("ImageShow");
-        ivResizeTop = (ImageView) shapeLayout.findViewById(R.id.main_activity_ivResizeTop);
-        ivResizeTop.setTag("ResizeTop");
-        ivResizeBottom = (ImageView) shapeLayout.findViewById(R.id.main_activity_ivResizeBottom);
-        ivResizeBottom.setTag("ResizeBottom");
+    public void createOrUpdateFragment(int fragmentTag) {
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        tShirtFragment = (TShirtFragment) getSupportFragmentManager().findFragmentByTag(String.valueOf(fragmentTag));
 
+        if (tShirtFragment == null) {
+            createNewFragment(fragmentTag);
+            tShirtFragment.setRetainInstance(true);
+            ft.replace(R.id.embed_shirt, tShirtFragment, String.valueOf(fragmentTag)).addToBackStack(null);
+            ft.commit();
+        } else {
+            ft.replace(R.id.embed_shirt, tShirtFragment).addToBackStack(null);
+            ft.commit();
+        }
+    }
+
+    private void setUpViewById() {
         btnCheckout = (Button) findViewById(R.id.header_btCheckout);
         btnQuantity = (Button) findViewById(R.id.header_btChangeQuantity);
 
@@ -117,8 +104,7 @@ public class MyActivity extends FragmentActivity
         btAddText = (Button) findViewById(R.id.footer_control_btAddText);
     }
 
-    private void setActionListener()
-    {
+    private void setActionListener() {
         btnCheckout.setOnClickListener(onClickListener);
 
         btnLeftMenu.setOnClickListener(onClickListener);
@@ -127,26 +113,19 @@ public class MyActivity extends FragmentActivity
         btAddText.setOnClickListener(onClickListener);
     }
 
-    View.OnClickListener onClickListener = new View.OnClickListener()
-    {
+    View.OnClickListener onClickListener = new View.OnClickListener() {
         @Override
-        public void onClick(View view)
-        {
-            switch (view.getId())
-            {
+        public void onClick(View view) {
+            switch (view.getId()) {
                 case R.id.footer_control_btAddImage:
                     PopupMenu popup = new PopupMenu(MyActivity.this, btAddImage);
                     popup.getMenuInflater().inflate(R.menu.image_popup_menu, popup.getMenu());
-                    popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener()
-                    {
-                        public boolean onMenuItemClick(MenuItem item)
-                        {
-                            if (item.getTitle().equals("TAKE PICTURE"))
-                            {
+                    popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                        public boolean onMenuItemClick(MenuItem item) {
+                            if (item.getTitle().equals("TAKE PICTURE")) {
                                 takeNewImage();
                             }
-                            if (item.getTitle().equals("CHOOSE FILE"))
-                            {
+                            if (item.getTitle().equals("CHOOSE FILE")) {
                                 chooseImageFile();
                             }
                             return true;
@@ -165,17 +144,14 @@ public class MyActivity extends FragmentActivity
                     showRightMenu();
                     break;
                 case R.id.footer_control_btAddText:
-                    new InputDialog(new InputActionListener()
-                    {
+                    new InputDialog(new InputActionListener() {
                         @Override
-                        public void onSubmit(String result)
-                        {
+                        public void onSubmit(String result) {
                             ViewZoomer viewZoomer = new ViewZoomer(getApplicationContext(), result, null, null);
                             currentZoomView.add(viewZoomer);
                             tShirtFragment.getRlRootLayout().addView(viewZoomer);
                             layerModels.add(new LayerModel(countLayer++, ConstantValue.TEXT_ITEM_TYPE, result, viewZoomer));
-                            if (currentLayer != -1)
-                            {
+                            if (currentLayer != -1) {
                                 layerModels.get(currentLayer).getViewZoomer().setBackgroundNull();
                             }
                             currentLayer = countLayer;
@@ -187,42 +163,33 @@ public class MyActivity extends FragmentActivity
         }
     };
 
-    private void takeNewImage()
-    {
+    private void takeNewImage() {
         Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
         startActivityForResult(cameraIntent, ConstantValue.CAPTURE_PICTURE);
     }
 
-    private void chooseImageFile()
-    {
+    private void chooseImageFile() {
         Intent intentGallery = new Intent();
         intentGallery.setType("image/*");
         intentGallery.setAction(Intent.ACTION_GET_CONTENT);
         startActivityForResult(Intent.createChooser(intentGallery, "Complete action using"), ConstantValue.PICK_FROM_FILE);
     }
 
-    private void showLeftMenu()
-    {
-        if (tShirtFragment.getLlLeftMenu().getVisibility() == View.GONE)
-        {
+    private void showLeftMenu() {
+        if (tShirtFragment.getLlLeftMenu().getVisibility() == View.GONE) {
             tShirtFragment.getRlRootLayout().bringChildToFront(tShirtFragment.getLlLeftMenu());
             tShirtFragment.getLlLeftMenu().setVisibility(View.VISIBLE);
-            if (currentLayer != -1)
-            {
+            if (currentLayer != -1) {
                 layerModels.get(currentLayer).getViewZoomer().setEnabled(false);
                 layerModels.get(currentLayer).getViewZoomer().setBackgroundNull();
             }
-            tShirtFragment.setTextChangeListener(new TextChangeListener()
-            {
+            tShirtFragment.setTextChangeListener(new TextChangeListener() {
                 @Override
-                public void changeColor()
-                {
+                public void changeColor() {
                     PopupMenu popup = new PopupMenu(MyActivity.this, btnQuantity);
                     popup.getMenuInflater().inflate(R.menu.color_popup_menu, popup.getMenu());
-                    popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener()
-                    {
-                        public boolean onMenuItemClick(MenuItem item)
-                        {
+                    popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                        public boolean onMenuItemClick(MenuItem item) {
                             ViewZoomer oldView = layerModels.get(currentLayer).getViewZoomer();
 
                             String text = oldView.getText();
@@ -244,8 +211,7 @@ public class MyActivity extends FragmentActivity
                 }
 
                 @Override
-                public void changeText(String text)
-                {
+                public void changeText(String text) {
                     ViewZoomer oldView = layerModels.get(currentLayer).getViewZoomer();
 
                     ViewZoomer viewZoomer = new ViewZoomer(getApplicationContext(), text, oldView.getColorDefault(), oldView.getFontDefault());
@@ -261,14 +227,11 @@ public class MyActivity extends FragmentActivity
                 }
 
                 @Override
-                public void changeFont()
-                {
+                public void changeFont() {
                     PopupMenu popup = new PopupMenu(MyActivity.this, btnQuantity);
                     popup.getMenuInflater().inflate(R.menu.font_popup_menu, popup.getMenu());
-                    popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener()
-                    {
-                        public boolean onMenuItemClick(MenuItem item)
-                        {
+                    popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                        public boolean onMenuItemClick(MenuItem item) {
                             ViewZoomer oldView = layerModels.get(currentLayer).getViewZoomer();
 
                             String text = oldView.getText();
@@ -289,71 +252,56 @@ public class MyActivity extends FragmentActivity
                     popup.show();
                 }
             });
-        }
-        else
-        {
+        } else {
             tShirtFragment.getLlLeftMenu().setVisibility(View.GONE);
-            if (currentLayer != -1)
-            {
+            if (currentLayer != -1) {
                 layerModels.get(currentLayer).getViewZoomer().setEnabled(true);
                 layerModels.get(currentLayer).getViewZoomer().setBackground();
             }
         }
     }
 
-    private void showRightMenu()
-    {
-        if (tShirtFragment.getLlRightMenu().getVisibility() == View.GONE)
-        {
+    private void showRightMenu() {
+        if (tShirtFragment.getLlRightMenu().getVisibility() == View.GONE) {
             LayerModel[] layers = new LayerModel[layerModels.size()];
             layers = layerModels.toArray(layers);
             LayerArrayAdapter adapter = new LayerArrayAdapter(MyActivity.this, R.id.menu_right_lvListLayer, layers);
             lvListLayer = tShirtFragment.getLvListLayer();
             lvListLayer.setAdapter(adapter);
-            lvListLayer.setOnItemClickListener(new AdapterView.OnItemClickListener()
-            {
+            lvListLayer.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
-                public void onItemClick(AdapterView<?> adapterView, View view, int i, long l)
-                {
+                public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                     Toast.makeText(getApplicationContext(), "item " + i, Toast.LENGTH_SHORT).show();
                     layerModels.get(i).getViewZoomer().setEnabled(true);
                     layerModels.get(i).getViewZoomer().setBackground();
                     currentLayer = i;
                     tShirtFragment.getLlRightMenu().setVisibility(View.GONE);
                     tShirtFragment.getRlRootLayout().bringChildToFront(layerModels.get(i).getViewZoomer());
-                    if (layerModels.get(i).getType() == ConstantValue.TEXT_ITEM_TYPE)
-                    {
+                    if (layerModels.get(i).getType() == ConstantValue.TEXT_ITEM_TYPE) {
                         btnLeftMenu.setEnabled(true);
                     }
-                    if (layerModels.get(i).getType() == ConstantValue.IMAGE_ITEM_TYPE)
-                    {
+                    if (layerModels.get(i).getType() == ConstantValue.IMAGE_ITEM_TYPE) {
                         btnLeftMenu.setEnabled(false);
                     }
                 }
             });
-            for (LayerModel layer : layerModels)
-            {
+            for (LayerModel layer : layerModels) {
                 layer.getViewZoomer().setEnabled(false);
                 layer.getViewZoomer().setBackgroundNull();
             }
             tShirtFragment.getRlRootLayout().bringChildToFront(tShirtFragment.getLlRightMenu());
             tShirtFragment.getLlRightMenu().setVisibility(View.VISIBLE);
-        }
-        else
-        {
+        } else {
             tShirtFragment.getLlRightMenu().setVisibility(View.GONE);
-            if (currentLayer != -1)
-            {
+            if (currentLayer != -1) {
                 layerModels.get(currentLayer).getViewZoomer().setEnabled(true);
                 layerModels.get(currentLayer).getViewZoomer().setBackground();
             }
         }
     }
 
-    public void changeToEditAble(View view)
-    {
-        for (LayerModel layer : layerModels)
-        {
+    public void changeToEditAble(View view) {
+        for (LayerModel layer : layerModels) {
             layer.getViewZoomer().setEnabled(false);
             layer.getViewZoomer().setBackgroundNull();
         }
@@ -361,14 +309,11 @@ public class MyActivity extends FragmentActivity
 
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data)
-    {
-        if (resultCode != Activity.RESULT_OK)
-        {
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode != Activity.RESULT_OK) {
             return;
         }
-        switch (requestCode)
-        {
+        switch (requestCode) {
             case ConstantValue.PICK_FROM_FILE:
                 Uri mImageCaptureUri = data.getData();
                 mImageCaptureUri = Uri.fromFile(new File(UtilImage.getRealPathFromURI(this, mImageCaptureUri)));
@@ -381,17 +326,16 @@ public class MyActivity extends FragmentActivity
         }
     }
 
-    private void addZoomAndModelLayout(Bitmap icon)
-    {
-        ViewZoomer viewZoomer = new ViewZoomer(getApplicationContext(), scaleImage(icon, 200, 200));
+    private void addZoomAndModelLayout(Bitmap icon) {
+        ViewZoomer viewZoomer = new ViewZoomer(getApplicationContext(), UtilImage.scaleImage(icon, 200, 200));
         tShirtFragment.getRlRootLayout().addView(viewZoomer);
+        List<View> list = zoomViewsMap.get(currentSide);
+
         currentZoomView.add(viewZoomer);
         String name = getResources().getResourceEntryName(R.drawable.bt_red_popup_small);
         layerModels.add(new LayerModel(countLayer++, ConstantValue.IMAGE_ITEM_TYPE, name, viewZoomer));
-        if (layerModels.size() > 0)
-        {
-            for (LayerModel layer : layerModels)
-            {
+        if (layerModels.size() > 0) {
+            for (LayerModel layer : layerModels) {
                 layer.getViewZoomer().setEnabled(false);
                 layer.getViewZoomer().setBackgroundNull();
             }
@@ -402,125 +346,41 @@ public class MyActivity extends FragmentActivity
         btnLeftMenu.setEnabled(false);
     }
 
-    private boolean onTouchShirt(View view, MotionEvent motionEvent)
-    {
-        layoutParams = (LayoutParams) view.getLayoutParams();
-        switch (motionEvent.getAction())
-        {
-            case MotionEvent.ACTION_DOWN:
-                home_x = (int) motionEvent.getRawX();
-                home_y = (int) motionEvent.getRawY();
-                break;
-            case MotionEvent.ACTION_MOVE:
-                int x_moved = (int) motionEvent.getRawX();
-                int y_moved = (int) motionEvent.getRawY();
-
-                layoutParams.leftMargin = (x_moved >= home_x) ? x_moved - home_x : home_x - x_moved;
-                layoutParams.topMargin = (y_moved >= home_y) ? y_moved - home_y : home_y - y_moved;
-
-                view.setLayoutParams(layoutParams);
-                break;
-            case MotionEvent.ACTION_UP:
-                layoutParams.leftMargin = 0;
-                layoutParams.topMargin = 0;
-                view.setLayoutParams(layoutParams);
-                break;
-        }
-        return true;
-    }
-
-    public void createOrUpdateFragment(int fragmentTag)
-    {
-        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        tShirtFragment = (TShirtFragment) getSupportFragmentManager().findFragmentByTag(String.valueOf(fragmentTag));
-
-        if (tShirtFragment == null)
-        {
-            createNewFragment(fragmentTag);
-            tShirtFragment.setRetainInstance(true);
-            ft.replace(R.id.embed_shirt, tShirtFragment, String.valueOf(fragmentTag)).addToBackStack(null);
-            ft.commit();
-        }
-        else
-        {
-            ft.replace(R.id.embed_shirt, tShirtFragment).addToBackStack(null);
-            ft.commit();
-        }
-    }
-
-    private void createNewFragment(int fragmentTag)
-    {
-        if (fragmentTag == LEFT_TAG)
-        {
+    private void createNewFragment(int fragmentTag) {
+        if (fragmentTag == LEFT_TAG) {
             tShirtFragment = new LeftTShirtFragment();
-        }
-        else if (fragmentTag == FRONT_TAG)
-        {
+        } else if (fragmentTag == FRONT_TAG) {
             tShirtFragment = new FrontTShirtFragment();
-        }
-        else if (fragmentTag == BACK_TAG)
-        {
+        } else if (fragmentTag == BACK_TAG) {
             tShirtFragment = new BackTShirtFragment();
-        }
-        else if (fragmentTag == RIGHT_TAG)
-        {
+        } else if (fragmentTag == RIGHT_TAG) {
             tShirtFragment = new RightTShirtFragment();
         }
     }
 
 
-    public void saveState(String sideTag)
-    {
+    public void saveState(String sideTag) {
         zoomViewsMap.put(sideTag, currentZoomView);
         currentZoomView = new ArrayList<View>();
     }
 
-    public List<View> getView(String sideTag)
-    {
+    public List<View> getView(String sideTag) {
         return zoomViewsMap.get(sideTag);
     }
 
-    public void setCurrentZoomView(List<View> views)
-    {
+    public void setCurrentZoomView(List<View> views) {
         currentZoomView = views;
 
     }
 
-    private Bitmap scaleImage(Bitmap bitmap, int maxWidth, int maxHeight)
-    {
-//        int widthBitmap = bitmap.getWidth();
-//        int heightBitmap = bitmap.getHeight();
-//        if (widthBitmap > heightBitmap)
-//        {
-//            return Bitmap.createScaledBitmap(bitmap, 200, heightBitmap * 200 / widthBitmap, true);
-//        }
-//        else
-//        {
-//            return Bitmap.createScaledBitmap(bitmap, widthBitmap*200/heightBitmap, 200, true);
-//        }
-        double ratioX = (double) maxWidth / bitmap.getWidth();
-        double ratioY = (double) maxHeight / bitmap.getHeight();
-        double ratio = Math.min(ratioX, ratioY);
-
-        int newWidth = (int) (bitmap.getWidth() * ratio);
-        int newHeight = (int) (bitmap.getHeight() * ratio);
-
-        return Bitmap.createScaledBitmap(bitmap, newWidth, newHeight, true);
-
-    }
-
     @Override
-    public void onBackPressed()
-    {
-        if (exist)
-        {
+    public void onBackPressed() {
+        if (exist) {
             Intent startMain = new Intent(Intent.ACTION_MAIN);
             startMain.addCategory(Intent.CATEGORY_HOME);
             startMain.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(startMain);
-        }
-        else
-        {
+        } else {
             exist = true;
             Toast.makeText(this, "Back press a time to exist", Toast.LENGTH_SHORT).show();
         }
