@@ -14,6 +14,10 @@ public class LayerModel
     private String name;
     private ViewZoomer viewZoomer;
 
+    public LayerModel()
+    {
+    }
+
     public LayerModel(int id, int type, String name, ViewZoomer viewZoomer)
     {
         this.id = id;
