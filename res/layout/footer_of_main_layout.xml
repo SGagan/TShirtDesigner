@@ -4,13 +4,15 @@
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
               android:orientation="horizontal"
-              android:paddingTop="@dimen/small_margin_size">
+              android:paddingTop="@dimen/small_margin_size"
+              android:paddingBottom="@dimen/small_margin_size"
+              android:background="@drawable/bg_topbar">
     <Button android:id="@+id/footer_control_btShowLeftMenu"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/left_setting_background"
             android:layout_gravity="center_vertical"
-            />
+            android:layout_marginLeft="5dp"/>
     <LinearLayout android:layout_width="wrap_content"
                   android:layout_height="wrap_content"
                   android:orientation="vertical">
@@ -33,13 +35,14 @@
             <Button android:id="@+id/footer_control_btRotateLeft"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/button_rotate_cc_default"
+                    android:background="@drawable/footer_bt_left_rotate_bg"
                     android:onClick="rotateLeft"/>
             <Button
                     android:id="@+id/footer_control_btRotateRight"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/button_rotate_c_default"
+                    android:layout_marginLeft="2dp"
+                    android:background="@drawable/footer_bt_right_rotate_bg"
                     android:onClick="rotateRight"/>
         </LinearLayout>
     </LinearLayout>
@@ -54,6 +57,6 @@
             android:layout_height="wrap_content"
             android:background="@drawable/edit_layer_button_background"
             android:onClick="changeToEditAble"
-            android:layout_gravity="center"
-            android:layout_marginLeft="20dp"/>
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="7dp"/>
 </LinearLayout>

@@ -6,23 +6,15 @@ import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.v4.app.Fragment;
-import android.view.LayoutInflater;
-import android.view.MotionEvent;
-import android.view.View;
-import android.view.ViewGroup;
+import android.view.*;
 import android.widget.*;
-import com.free.tshirtdesigner.action.ColorChooserInterface;
-import com.free.tshirtdesigner.action.InputActionListener;
-import com.free.tshirtdesigner.action.TextChangeListener;
+import com.free.tshirtdesigner.action.*;
 import com.free.tshirtdesigner.adapter.GridViewAdapter;
 import com.free.tshirtdesigner.dialog.InputDialog;
 import com.free.tshirtdesigner.util.UtilImage;
 import com.free.tshirtdesigner.util.UtilResource;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.util.List;
 
 /**
@@ -37,7 +29,6 @@ public class TShirtFragment extends Fragment
     LinearLayout llRightMenu;
     LinearLayout llLeftMenu;
     GridView gvColorChooser;
-    String colors = "white";
     public int tShirtDirection;
     int sideTag;
     private ListView lvListLayer;
@@ -75,9 +66,9 @@ public class TShirtFragment extends Fragment
             public void itemClick(String colorNameSelected)
             {
                 int colorSelectedId = UtilResource.getStringIdByName(getActivity(), colorNameSelected);
-                colors = getResources().getString(colorSelectedId);
+                MyActivity.colors = getResources().getString(colorSelectedId);
                 Bitmap bitmap = BitmapFactory.decodeResource(getResources(), tShirtDirection);
-                bitmap = UtilImage.grayScaleImage(bitmap, colors);
+                bitmap = UtilImage.grayScaleImage(bitmap, MyActivity.colors);
                 ivShirt.setImageBitmap(bitmap);
             }
         }));
@@ -169,10 +160,10 @@ public class TShirtFragment extends Fragment
 
     private void showDirectionTShirt()
     {
-        if (!colors.equals("white"))
+        if (!MyActivity.colors.equals("white"))
         {
             Bitmap bitmap = BitmapFactory.decodeResource(getResources(), tShirtDirection);
-            bitmap = UtilImage.grayScaleImage(bitmap, colors);
+            bitmap = UtilImage.grayScaleImage(bitmap, MyActivity.colors);
             ivShirt.setImageBitmap(bitmap);
         }
         else
