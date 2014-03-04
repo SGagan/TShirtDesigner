@@ -320,6 +320,7 @@ public class MyActivity extends FragmentActivity
                     {
                         btnLeftMenu.setEnabled(false);
                     }
+                    currentZoomView.remove(currentSide+1);
                 }
             });
         }
@@ -421,6 +422,7 @@ public class MyActivity extends FragmentActivity
         ViewZoomer viewZoomer = new ViewZoomer(getApplicationContext(), UtilImage.scaleImage(icon, 200, 200));
         tShirtFragment.getRlRootLayout().addView(viewZoomer);
         List<View> list = zoomViewsMap.get(currentSide);
+        list.add(viewZoomer);
 
         currentZoomView.add(viewZoomer);
         String name = getResources().getResourceEntryName(R.drawable.bt_red_popup_small);

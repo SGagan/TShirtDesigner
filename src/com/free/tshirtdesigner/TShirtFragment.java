@@ -93,8 +93,6 @@ public class TShirtFragment extends Fragment
                 rlRootLayout.addView(zoomView);
             }
             getMainActivity().setCurrentZoomView(viewList);
-
-
         }
 
         // left menu
