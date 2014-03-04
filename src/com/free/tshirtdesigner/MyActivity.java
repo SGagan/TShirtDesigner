@@ -181,7 +181,7 @@ public class MyActivity extends FragmentActivity
                         public void onSubmit(String result)
                         {
                             ViewZoomer viewZoomer = new ViewZoomer(getApplicationContext(), result, null, null);
-                            currentZoomView.add(viewZoomer);
+                            currentZoomView.add(0,viewZoomer);
                             tShirtFragment.getRlRootLayout().addView(viewZoomer);
                             layerModels.get(currentSide).add(new LayerModel(countLayer[currentSide]++, ConstantValue.TEXT_ITEM_TYPE, result, viewZoomer));
                             if (layerModels.get(currentSide).size() > 0)
@@ -320,7 +320,7 @@ public class MyActivity extends FragmentActivity
                     {
                         btnLeftMenu.setEnabled(false);
                     }
-                    currentZoomView.remove(currentSide+1);
+                    currentZoomView.remove(currentSide);
                 }
             });
         }
@@ -421,10 +421,8 @@ public class MyActivity extends FragmentActivity
     {
         ViewZoomer viewZoomer = new ViewZoomer(getApplicationContext(), UtilImage.scaleImage(icon, 200, 200));
         tShirtFragment.getRlRootLayout().addView(viewZoomer);
-        List<View> list = zoomViewsMap.get(currentSide);
-        list.add(viewZoomer);
 
-        currentZoomView.add(viewZoomer);
+        currentZoomView.add(0,viewZoomer);
         String name = getResources().getResourceEntryName(R.drawable.bt_red_popup_small);
         layerModels.get(currentSide).add(new LayerModel(countLayer[currentSide]++, ConstantValue.IMAGE_ITEM_TYPE, name, viewZoomer));
         if (layerModels.get(currentSide).size() > 0)
