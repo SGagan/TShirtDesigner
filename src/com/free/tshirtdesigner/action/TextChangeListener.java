@@ -12,4 +12,6 @@ public interface TextChangeListener
     public void changeText(String text);
 
     public void changeFont();
+
+    public void delete();
 }

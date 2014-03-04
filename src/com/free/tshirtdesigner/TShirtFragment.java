@@ -6,15 +6,24 @@ import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.v4.app.Fragment;
-import android.view.*;
+import android.view.LayoutInflater;
+import android.view.MotionEvent;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.*;
-import com.free.tshirtdesigner.action.*;
+import com.free.tshirtdesigner.action.ColorChooserInterface;
+import com.free.tshirtdesigner.action.InputActionListener;
+import com.free.tshirtdesigner.action.TextChangeListener;
 import com.free.tshirtdesigner.adapter.GridViewAdapter;
 import com.free.tshirtdesigner.dialog.InputDialog;
 import com.free.tshirtdesigner.util.UtilImage;
 import com.free.tshirtdesigner.util.UtilResource;
+import com.free.tshirtdesigner.util.setting.ConstantValue;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -36,6 +45,7 @@ public class TShirtFragment extends Fragment
     private LinearLayout llChangeColor;
     private LinearLayout llChangeText;
     private LinearLayout llChangeFont;
+    private LinearLayout llDeleteLayer;
 
     private TextChangeListener textChangeListener;
 
@@ -91,10 +101,12 @@ public class TShirtFragment extends Fragment
         llChangeColor = (LinearLayout) rlRootLayout.findViewById(R.id.left_menu_btChangeColor);
         llChangeText = (LinearLayout) rlRootLayout.findViewById(R.id.left_menu_btChangeText);
         llChangeFont = (LinearLayout) rlRootLayout.findViewById(R.id.left_menu_btChangeFont);
+        llDeleteLayer = (LinearLayout) rlRootLayout.findViewById(R.id.left_menu_btDeleteLayer);
 
         llChangeColor.setOnClickListener(onClickListener);
         llChangeText.setOnClickListener(onClickListener);
         llChangeFont.setOnClickListener(onClickListener);
+        llDeleteLayer.setOnClickListener(onClickListener);
 
         return rlRootLayout;
     }
@@ -123,6 +135,9 @@ public class TShirtFragment extends Fragment
                     break;
                 case R.id.left_menu_btChangeFont:
                     textChangeListener.changeFont();
+                    break;
+                case R.id.left_menu_btDeleteLayer:
+                    textChangeListener.delete();
                     break;
             }
         }
@@ -221,5 +236,22 @@ public class TShirtFragment extends Fragment
     public ListView getLvListLayer()
     {
         return lvListLayer;
+    }
+
+    public void showMenuLeft(int itemType)
+    {
+        switch (itemType)
+        {
+            case ConstantValue.TEXT_ITEM_TYPE:
+                llChangeColor.setVisibility(View.VISIBLE);
+                llChangeFont.setVisibility(View.VISIBLE);
+                llChangeText.setVisibility(View.VISIBLE);
+                break;
+            case ConstantValue.IMAGE_ITEM_TYPE:
+                llChangeColor.setVisibility(View.GONE);
+                llChangeFont.setVisibility(View.GONE);
+                llChangeText.setVisibility(View.GONE);
+                break;
+        }
     }
 }
