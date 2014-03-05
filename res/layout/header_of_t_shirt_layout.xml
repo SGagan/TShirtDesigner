@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:id="@+id/add_new_equipment_llTitle"
+              android:orientation="vertical">
+    <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/add_new_equipment_title"
+            android:background="@drawable/bg_topbar">
+        <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/btn_new"
+                android:background="@drawable/bt_cancel"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="@dimen/edit_basic_info_bar_margin_left"
+                android:contentDescription="@string/app_name"/>
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="T Shirt Design"
+                android:id="@+id/add_new_equipment_tvAddUnitTitle"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:textColor="@color/screen_title_text_color"
+                android:textStyle="bold"
+                android:layout_alignTop="@+id/btn_new"/>
+
+        <ImageView
+                android:id="@+id/bt_save"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bt_save"
+                android:layout_centerVertical="true"
+                android:layout_toLeftOf="@+id/btn_flow"
+                android:contentDescription="@string/app_name"/>
+        <Button
+                android:id="@+id/btn_flow"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bt_more_actions"
+                android:layout_centerVertical="true"
+                android:layout_alignParentRight="true"/>
+
+    </RelativeLayout>
+    <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/line_blue"
+            android:id="@+id/iv_line"
+            android:contentDescription="@string/app_name"/>
+</LinearLayout>

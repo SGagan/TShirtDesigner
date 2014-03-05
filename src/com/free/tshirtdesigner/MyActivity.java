@@ -1,21 +1,25 @@
 package com.free.tshirtdesigner;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Rect;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.view.MenuItem;
-import android.view.View;
+import android.view.*;
 import android.widget.*;
 import com.free.tshirtdesigner.action.InputActionListener;
 import com.free.tshirtdesigner.action.TextChangeListener;
 import com.free.tshirtdesigner.adapter.LayerArrayAdapter;
 import com.free.tshirtdesigner.dialog.InputDialog;
 import com.free.tshirtdesigner.model.LayerModel;
+import com.free.tshirtdesigner.util.LocationComponent;
 import com.free.tshirtdesigner.util.UtilImage;
 import com.free.tshirtdesigner.util.setting.ConstantValue;
 
@@ -29,7 +33,6 @@ public class MyActivity extends FragmentActivity
 {
     boolean exist = false;
     private static final int CHECKOUT_CODE = 100;
-    public static String colors = "white";
     private Button btAddImage;
     //    private RelativeLayout rlRootLayout;
     private Button btnCheckout;
@@ -38,10 +41,18 @@ public class MyActivity extends FragmentActivity
     private Button btnLeftMenu;
     private Button btnRightMenu;
     private Button btAddText;
+    private ImageView btSave;
+    private ImageView btNew;
+    private Button btMenu;
+    private PopupWindow pwindo;
+
+    public static final String DEFAULT_COLOR = "white";
     public static final int FRONT_TAG = 0;
     public static final int RIGHT_TAG = 1;
     public static final int BACK_TAG = 2;
     public static final int LEFT_TAG = 3;
+    public static String colors = DEFAULT_COLOR;
+
 
     TShirtFragment tShirtFragment;
     private int[] countLayer = new int[4];
@@ -58,6 +69,14 @@ public class MyActivity extends FragmentActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
 
+        setupNewTShirt();
+        createOrUpdateFragment(FRONT_TAG);
+        setUpViewById();
+        setActionListener();
+    }
+
+    private void setupNewTShirt()
+    {
         layerModels.add(new ArrayList<LayerModel>());
         layerModels.add(new ArrayList<LayerModel>());
         layerModels.add(new ArrayList<LayerModel>());
@@ -70,10 +89,6 @@ public class MyActivity extends FragmentActivity
         }
 
         currentSide = FRONT_TAG;
-        createOrUpdateFragment(FRONT_TAG);
-
-        setUpViewById();
-        setActionListener();
     }
 
     public void rotateLeft(View view)
@@ -96,23 +111,24 @@ public class MyActivity extends FragmentActivity
         createOrUpdateFragment(currentSide);
     }
 
-    public void createOrUpdateFragment(int fragmentTag)
+    public void createOrUpdateFragment(int fragmentTag, boolean... isRefresh)
     {
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         tShirtFragment = (TShirtFragment) getSupportFragmentManager().findFragmentByTag(String.valueOf(fragmentTag));
 
-        if (tShirtFragment == null)
+        if (tShirtFragment != null && isRefresh.length == 0)
+        {
+            ft.replace(R.id.embed_shirt, tShirtFragment).addToBackStack(null);
+            ft.commit();
+        }
+        else
         {
             createNewFragment(fragmentTag);
             tShirtFragment.setRetainInstance(true);
             ft.replace(R.id.embed_shirt, tShirtFragment, String.valueOf(fragmentTag)).addToBackStack(null);
             ft.commit();
         }
-        else
-        {
-            ft.replace(R.id.embed_shirt, tShirtFragment).addToBackStack(null);
-            ft.commit();
-        }
+
     }
 
     private void setUpViewById()
@@ -125,16 +141,22 @@ public class MyActivity extends FragmentActivity
         btnLeftMenu.setEnabled(false);
         btAddImage = (Button) findViewById(R.id.footer_control_btAddImage);
         btAddText = (Button) findViewById(R.id.footer_control_btAddText);
+        btNew = (ImageView) findViewById(R.id.btn_new);
+        btMenu = (Button) findViewById(R.id.btn_flow);
+        btSave = (ImageView) findViewById(R.id.bt_save);
     }
 
     private void setActionListener()
     {
-        btnCheckout.setOnClickListener(onClickListener);
+//        btnCheckout.setOnClickListener(onClickListener);
 
         btnLeftMenu.setOnClickListener(onClickListener);
         btnRightMenu.setOnClickListener(onClickListener);
         btAddImage.setOnClickListener(onClickListener);
         btAddText.setOnClickListener(onClickListener);
+        btNew.setOnClickListener(onClickListener);
+        btMenu.setOnClickListener(onClickListener);
+        btSave.setOnClickListener(onClickListener);
     }
 
     View.OnClickListener onClickListener = new View.OnClickListener()
@@ -164,10 +186,7 @@ public class MyActivity extends FragmentActivity
                     });
                     popup.show();
                     break;
-                case R.id.header_btCheckout:
-                    Intent intent = new Intent(MyActivity.this, CheckoutActivity.class);
-                    startActivityForResult(intent, CHECKOUT_CODE);
-                    break;
+
                 case R.id.footer_control_btShowLeftMenu:
                     showLeftMenu();
                     break;
@@ -181,7 +200,7 @@ public class MyActivity extends FragmentActivity
                         public void onSubmit(String result)
                         {
                             ViewZoomer viewZoomer = new ViewZoomer(getApplicationContext(), result, null, null);
-                            currentZoomView.add(0,viewZoomer);
+                            currentZoomView.add(0, viewZoomer);
                             tShirtFragment.getRlRootLayout().addView(viewZoomer);
                             layerModels.get(currentSide).add(new LayerModel(countLayer[currentSide]++, ConstantValue.TEXT_ITEM_TYPE, result, viewZoomer));
                             if (layerModels.get(currentSide).size() > 0)
@@ -201,9 +220,51 @@ public class MyActivity extends FragmentActivity
                         }
                     }).show(getSupportFragmentManager().beginTransaction(), "InputDialog");
                     break;
+                case R.id.btn_new:
+                    resetTshirt();
+                    break;
+                case R.id.btn_flow:
+                    initiatePopupWindow();
+                    break;
+                case R.id.checkout:
+                    Intent intent = new Intent(MyActivity.this, CheckoutActivity.class);
+                    startActivityForResult(intent, CHECKOUT_CODE);
+                    break;
+                case R.id.email:
+                    break;
+                case R.id.bt_save:
+                    doSave();
             }
         }
     };
+
+    private void doSave()
+    {
+        for (int i = 0; i < 4; i++)
+        {
+            createOrUpdateFragment(i);
+            if (tShirtFragment.rlRootLayout != null)
+            {
+                tShirtFragment.saveTShirt(getApplicationContext(), i);
+            }
+        }
+        Toast.makeText(this, "SAVE T SHIRT SUCCESSFUL", Toast.LENGTH_LONG).show();
+
+
+    }
+
+    private void resetTshirt()
+    {
+        colors = DEFAULT_COLOR;
+        zoomViewsMap.clear();
+        currentZoomView.clear();
+        currentLayer = new int[4];
+        countLayer = new int[4];
+        layerModels.clear();
+        getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+        setupNewTShirt();
+        createOrUpdateFragment(FRONT_TAG, true);
+    }
 
     private void takeNewImage()
     {
@@ -422,7 +483,7 @@ public class MyActivity extends FragmentActivity
         ViewZoomer viewZoomer = new ViewZoomer(getApplicationContext(), UtilImage.scaleImage(icon, 200, 200));
         tShirtFragment.getRlRootLayout().addView(viewZoomer);
 
-        currentZoomView.add(0,viewZoomer);
+        currentZoomView.add(0, viewZoomer);
         String name = getResources().getResourceEntryName(R.drawable.bt_red_popup_small);
         layerModels.get(currentSide).add(new LayerModel(countLayer[currentSide]++, ConstantValue.IMAGE_ITEM_TYPE, name, viewZoomer));
         if (layerModels.get(currentSide).size() > 0)
@@ -492,6 +553,29 @@ public class MyActivity extends FragmentActivity
         {
             exist = true;
             Toast.makeText(this, "Back press a time to exist", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void initiatePopupWindow()
+    {
+        try
+        {
+            LayoutInflater inflater = (LayoutInflater) MyActivity.this
+                    .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            View layout = inflater.inflate(R.layout.header_options_menu, (ViewGroup) findViewById(R.id.equipment_detail_menu_option_elements));
+            pwindo = new PopupWindow(layout, 150, ViewGroup.LayoutParams.WRAP_CONTENT, true);
+            pwindo.setBackgroundDrawable(new BitmapDrawable());
+            pwindo.setOutsideTouchable(true);
+            pwindo.setFocusable(true);
+            Rect location = LocationComponent.getLocationSpec(findViewById(R.id.btn_flow), pwindo);
+            Rect location_ivLine = LocationComponent.getLocation(findViewById(R.id.iv_line));
+            pwindo.showAtLocation(layout, Gravity.TOP | Gravity.RIGHT, location.left, location_ivLine.top);
+            layout.findViewById(R.id.email).setOnClickListener(onClickListener);
+            layout.findViewById(R.id.checkout).setOnClickListener(onClickListener);
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
         }
     }
 }

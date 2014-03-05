@@ -6,6 +6,7 @@ import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -53,6 +54,7 @@ public class TShirtFragment extends Fragment
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
         rlRootLayout = (RelativeLayout) inflater.inflate(R.layout.shirt_layout, container, false);
+        rlRootLayout.setDrawingCacheEnabled(true);
         ivShirt = (ImageView) rlRootLayout.findViewById(R.id.ivShirt);
         ivShirt.setImageResource(R.drawable.tshirt_front_500);
         ivShirt.setOnTouchListener(new View.OnTouchListener()
@@ -185,8 +187,9 @@ public class TShirtFragment extends Fragment
         }
     }
 
-    public void saveTShirt(Context context)
+    public void saveTShirt(Context context, int side)
     {
+        Log.e("TAG", "saveTShirt" + side);
         Bitmap bitmap = rlRootLayout.getDrawingCache();
         File file, f = null;
         if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED))
@@ -196,7 +199,7 @@ public class TShirtFragment extends Fragment
             {
                 file.mkdirs();
             }
-            f = new File(file.getAbsolutePath() + File.separator + "front" + ".png");
+            f = new File(file.getAbsolutePath() + File.separator + side + ".png");
         }
         try
         {

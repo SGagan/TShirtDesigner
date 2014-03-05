@@ -5,7 +5,7 @@
               android:layout_height="match_parent">
     <include android:id="@+id/layout_header"
              android:layout_weight="0.25"
-             layout="@layout/header_of_main_layout"/>
+             layout="@layout/header_of_t_shirt_layout"/>
     <FrameLayout
             android:id="@+id/embed_shirt"
             android:layout_weight="0.5"

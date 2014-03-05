@@ -140,4 +140,42 @@
     <color name="DarkBlue">#00008B</color>
     <color name="Navy">#000080</color>
     <color name="Black">#000000</color>
+    <!--title text color-->
+    <color name="screen_title_text_color">#FFFFFF</color>
+
+    <!--header text color-->
+    <color name="header1_text_color">#0072d3</color>
+    <color name="header2_text_color">#FFFFFF</color>
+
+    <!--content text color-->
+    <color name="brief_content_text_color">#0072d3</color>
+
+    <color name="account_balance_text_color">#333333</color>
+    <color name="account_balance_text_color_red">#d60909</color>
+
+    <!--other-->
+    <color name="trending_blue">#1EAFE4</color>
+    <color name="background_expand">#0072d3</color>
+    <color name="equipment_item_name">#333333</color>
+    <color name="white">#FFFFFF</color>
+    <color name="black">#000000</color>
+    <color name="blue">#0072d3</color>
+    <color name="red">#d60909</color>
+
+    <!--contact block-->
+    <color name="contact_lbcolor">#999999</color>
+    <color name="contact_color">#333333</color>
+    <color name="divider">#6D7B8D</color>
+
+    <!--basic_invoice_infor-->
+    <color name="basic_invoice_infor_lbColor">#999999</color>
+    <color name="basic_invoice_infor_tvColor">#333333</color>
+
+    <!--edit profile avatar-->
+    <color name="transparent">#00000000</color>
+    <color name="gray_1">#C0C0C0</color>
+    <color name="webview_backgound">#7f7f7f</color>
+    <!--block equipment detail specification-->
+    <color name="spec_lbColor">#999999</color>
+    <color name="spec_color">#333333</color>
 </resources>

@@ -24,10 +24,9 @@
             android:layout_height="wrap_content"
             android:layout_toRightOf="@id/header_btChangeQuantity"
             android:layout_marginLeft="@dimen/large_margin_size"
-            android:background="@drawable/button_checkout_disabled"/>
+            android:background="@drawable/btn_header_checkout_selector"/>
     <TextView android:layout_width="wrap_content"
               android:layout_height="wrap_content"
-              android:text="@string/message_without_price"
               android:textColor="@color/DarkGray"
               android:textSize="@dimen/text_default"
               android:layout_below="@id/header_btCheckout"

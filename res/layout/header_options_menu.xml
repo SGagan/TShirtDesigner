@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:id="@+id/equipment_detail_menu_option_elements"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:background="@drawable/bg_topbar"
+              android:padding="@dimen/small_margin_size">
+    <TextView android:id="@+id/email"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:text="Send Email"
+              android:textSize="@dimen/default_text_size"
+              android:textColor="@color/white"
+              android:textStyle="bold"/>
+    <ImageView android:layout_width="match_parent"
+               android:layout_height="wrap_content"
+               android:background="@drawable/line_horiz"
+               android:contentDescription="@string/app_name"
+               android:layout_marginTop="@dimen/small_margin_size"
+               android:layout_marginBottom="@dimen/small_margin_size"/>
+    <TextView android:id="@+id/checkout"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:text="Check Out"
+              android:textSize="@dimen/default_text_size"
+              android:textColor="@color/white"
+              android:textStyle="bold"/>
+
+</LinearLayout>

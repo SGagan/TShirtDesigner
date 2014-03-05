@@ -2,8 +2,7 @@
 <resources>
     <string name="app_name">TShirtDesigner</string>
     <string name="total_price">total price:</string>
-    <string name="quantity">quantity: 0</string>
-    <string name="message_without_price">Change quantity to 1 or more t-shirts to see price</string>
+    <string name="quantity">Size: M</string>
     <string name="white">1,1,1</string>
     <string name="gainsboro">0.863,0.863,0.863</string>
     <string name="dark_gray">0.751,0.751,0.751</string>
