@@ -30,11 +30,11 @@ public class MyActivity extends FragmentActivity
     private Button btnLeftMenu;
     private Button btnRightMenu;
     private Button btAddText;
-    private ImageView btSave;
-    private ImageView btNew;
+    private Button btSave;
+    private Button btNew;
     private Button btMenu;
 
-    private LinearLayout titleBar;
+    private RelativeLayout titleBar;
     private LinearLayout footerBar;
 
     public static final String DEFAULT_COLOR = "white";
@@ -129,10 +129,10 @@ public class MyActivity extends FragmentActivity
         btnLeftMenu.setEnabled(false);
         btAddImage = (Button) findViewById(R.id.footer_control_btAddImage);
         btAddText = (Button) findViewById(R.id.footer_control_btAddText);
-        btNew = (ImageView) findViewById(R.id.btn_new);
+        btNew = (Button) findViewById(R.id.btn_new);
         btMenu = (Button) findViewById(R.id.btn_flow);
-        btSave = (ImageView) findViewById(R.id.bt_save);
-        titleBar = (LinearLayout) findViewById(R.id.add_new_equipment_llTitle);
+        btSave = (Button) findViewById(R.id.bt_save);
+        titleBar = (RelativeLayout) findViewById(R.id.add_new_equipment_rlTitle);
         footerBar = (LinearLayout) findViewById(R.id.footer_control_llFooterControl);
     }
 
