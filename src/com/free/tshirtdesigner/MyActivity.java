@@ -1,12 +1,16 @@
 package com.free.tshirtdesigner;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.*;
+import android.os.Environment;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.view.View;
 import android.widget.*;
 import com.free.tshirtdesigner.action.InputActionListener;
@@ -14,12 +18,18 @@ import com.free.tshirtdesigner.action.TextChangeListener;
 import com.free.tshirtdesigner.adapter.LayerArrayAdapter;
 import com.free.tshirtdesigner.dialog.InputDialog;
 import com.free.tshirtdesigner.model.LayerModel;
-import com.free.tshirtdesigner.popup.*;
+import com.free.tshirtdesigner.popup.Popup;
+import com.free.tshirtdesigner.popup.PopupListener;
+import com.free.tshirtdesigner.popup.PopupLocationType;
+import com.free.tshirtdesigner.util.ClassUtils;
 import com.free.tshirtdesigner.util.UtilImage;
 import com.free.tshirtdesigner.util.setting.ConstantValue;
 
 import java.io.File;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class MyActivity extends FragmentActivity
 {
@@ -190,6 +200,7 @@ public class MyActivity extends FragmentActivity
                 {
                     case 0:
                         // todo : sendEmail
+                        sendEmail();
                         break;
                     case 1:
                         Intent intent = new Intent(MyActivity.this, CheckoutActivity.class);
@@ -199,6 +210,30 @@ public class MyActivity extends FragmentActivity
             }
         });
         puActionMenu.showBelow(titleBar, PopupLocationType.RIGHT);
+    }
+
+    private void sendEmail()
+    {
+        String pathOfFiles = Environment.getExternalStorageDirectory().getAbsolutePath()
+                + File.separator + TShirtFragment.FOLDER;
+        doSave();
+        ArrayList<Uri> uriList = new ArrayList<Uri>();
+        File externalStorage = new File(pathOfFiles);
+        for (int i = 0; i < 4; i++)
+        {
+            File data = new File(externalStorage, i + ".png");
+            if (data.exists())
+            {
+                uriList.add(Uri.fromFile(data));
+            }
+        }
+
+        showComposeEmail(uriList);
+    }
+
+    private void showComposeEmail(ArrayList<Uri> uriList)
+    {
+        ClassUtils.sendMailAttachedMultiFiles(getApplicationContext(), "", "T SHIRT DESIGNER", uriList);
     }
 
     private void showInputTextBox()
@@ -268,17 +303,17 @@ public class MyActivity extends FragmentActivity
 
     private void doSave()
     {
+        ProgressDialog progressDialog = new ProgressDialog(MyActivity.this);
+        progressDialog.setMessage("Loading...");
+        progressDialog.show();
         for (int i = 0; i < 4; i++)
         {
+            TShirtFragment.isSave = true;
             createOrUpdateFragment(i);
-            if (tShirtFragment.rlRootLayout != null)
-            {
-                tShirtFragment.saveTShirt(getApplicationContext(), i);
-            }
         }
-        Toast.makeText(this, "SAVE T SHIRT SUCCESSFUL", Toast.LENGTH_LONG).show();
-
-
+        TShirtFragment.isSave = true;
+        Toast.makeText(getApplicationContext(), "SAVE T SHIRT DONE", Toast.LENGTH_LONG).show();
+        progressDialog.dismiss();
     }
 
     private void resetTshirt()

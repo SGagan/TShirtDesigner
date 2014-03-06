@@ -1,5 +1,6 @@
 package com.free.tshirtdesigner;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -49,12 +50,16 @@ public class TShirtFragment extends Fragment
     private LinearLayout llDeleteLayer;
 
     private TextChangeListener textChangeListener;
+    public static boolean isSave = false;
+    public static final String FOLDER = "TShirt_Cache";
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
         rlRootLayout = (RelativeLayout) inflater.inflate(R.layout.shirt_layout, container, false);
         rlRootLayout.setDrawingCacheEnabled(true);
+
+
         ivShirt = (ImageView) rlRootLayout.findViewById(R.id.ivShirt);
         ivShirt.setImageResource(R.drawable.tshirt_front_500);
         ivShirt.setOnTouchListener(new View.OnTouchListener()
@@ -107,6 +112,14 @@ public class TShirtFragment extends Fragment
         llChangeText.setOnClickListener(onClickListener);
         llChangeFont.setOnClickListener(onClickListener);
         llDeleteLayer.setOnClickListener(onClickListener);
+
+        rlRootLayout.measure(View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED),
+                View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
+        rlRootLayout.layout(0, 0, rlRootLayout.getMeasuredWidth(), rlRootLayout.getMeasuredHeight());
+        if (isSave)
+        {
+            saveTShirt(getActivity());
+        }
 
         return rlRootLayout;
     }
@@ -187,35 +200,42 @@ public class TShirtFragment extends Fragment
         }
     }
 
-    public void saveTShirt(Context context, int side)
+    public void saveTShirt(Context context)
     {
-        Log.e("TAG", "saveTShirt" + side);
+        ProgressDialog progressDialog = new ProgressDialog(getActivity());
+        progressDialog.setMessage("Loading...");
+        progressDialog.show();
+        Log.e("TAG", "saveTShirt" + sideTag);
+        rlRootLayout.buildDrawingCache();
         Bitmap bitmap = rlRootLayout.getDrawingCache();
         File file, f = null;
         if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED))
         {
-            file = new File(Environment.getExternalStorageDirectory(), "Tshirt_cache");
+            file = new File(Environment.getExternalStorageDirectory(), FOLDER);
             if (!file.exists())
             {
                 file.mkdirs();
             }
-            f = new File(file.getAbsolutePath() + File.separator + side + ".png");
+            f = new File(file.getAbsolutePath() + File.separator + sideTag + ".png");
         }
         try
         {
             FileOutputStream outputStream = new FileOutputStream(f);
             bitmap.compress(Bitmap.CompressFormat.PNG, 10, outputStream);
             outputStream.close();
-            Toast.makeText(context, "SAVE T SHIRT DONE", Toast.LENGTH_LONG).show();
         }
         catch (FileNotFoundException e)
         {
-            e.printStackTrace();
+//            e.printStackTrace();
+            Log.e("TAG", "FileNotFoundException");
         }
         catch (IOException e)
         {
-            e.printStackTrace();
+//            e.printStackTrace();
+            Log.e("TAG", "IOException");
         }
+        progressDialog.dismiss();
+        rlRootLayout.setDrawingCacheEnabled(false);
     }
 
     @Override
