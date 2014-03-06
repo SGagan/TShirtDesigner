@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="colors_list">
+        <item>Black</item>
+        <item>Red</item>
+        <item>Green</item>
+        <item>Yellow</item>
+        <item>Blue</item>
+        <item>White</item>
+        <item>Gray</item>
+        <item>LightGray</item>
+        <item>DarkGray</item>
+        <item>Cyan</item>
+        <item>Magenta</item>
+    </string-array>
+
+    <string-array name="fonts_list">
+        <item>Caledo_bold</item>
+        <item>Chunk</item>
+        <item>Gtw</item>
+        <item>Hobby_of_night</item>
+        <item>Junction</item>
+        <item>Knewave</item>
+        <item>Linden_hill</item>
+        <item>Orbitron_bold</item>
+        <item>Ostrich_rounded</item>
+    </string-array>
+
+    <string-array name="image_menu">
+        <item>TAKE PICTURE</item>
+        <item>CHOOSE FILE</item>
+    </string-array>
+
+    <string-array name="action_menu">
+        <item>Send Email</item>
+        <item>Check Out</item>
+    </string-array>
+</resources>
