@@ -14,7 +14,7 @@
                 android:id="@+id/btn_new"
                 android:background="@drawable/bt_new_design_bg"
                 android:layout_centerVertical="true"
-                android:layout_marginLeft="5dp"/>
+                android:layout_marginLeft="@dimen/edit_basic_info_bar_margin_left"/>
         <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
