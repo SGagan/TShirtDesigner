@@ -1,62 +1,73 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:id="@+id/footer_control_llFooterControl"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
-              android:orientation="horizontal"
-              android:paddingTop="@dimen/small_margin_size"
-              android:paddingBottom="@dimen/small_margin_size"
-              android:background="@drawable/bg_topbar">
-    <Button android:id="@+id/footer_control_btShowLeftMenu"
-            android:layout_width="wrap_content"
+              android:orientation="vertical">
+    <ImageView
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/left_setting_background"
-            android:layout_gravity="center_vertical"
-            android:layout_marginLeft="5dp"/>
-    <LinearLayout android:layout_width="wrap_content"
-                  android:layout_height="wrap_content"
-                  android:orientation="vertical">
+            android:background="@drawable/bg_control_blue"
+            android:id="@+id/iv_line"
+            android:contentDescription="@string/app_name"/>
+    <LinearLayout
+            android:id="@+id/footer_control_llFooterControl"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingTop="@dimen/small_margin_size"
+            android:paddingBottom="@dimen/small_margin_size"
+            android:background="@drawable/bg_topbar">
+        <Button android:id="@+id/footer_control_btShowLeftMenu"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/left_setting_background"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="5dp"/>
         <LinearLayout android:layout_width="wrap_content"
                       android:layout_height="wrap_content"
-                      android:layout_gravity="center_horizontal">
-            <Button android:id="@+id/footer_control_btAddText"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/add_text_background"/>
-            <Button
-                    android:id="@+id/footer_control_btAddImage"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/add_image_background"/>
+                      android:orientation="vertical">
+            <LinearLayout android:layout_width="wrap_content"
+                          android:layout_height="wrap_content"
+                          android:layout_gravity="center_horizontal">
+                <Button android:id="@+id/footer_control_btAddText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/add_text_background"/>
+                <Button
+                        android:id="@+id/footer_control_btAddImage"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/add_image_background"/>
+            </LinearLayout>
+            <LinearLayout android:layout_width="wrap_content"
+                          android:layout_height="wrap_content"
+                          android:layout_gravity="center_horizontal">
+                <Button android:id="@+id/footer_control_btRotateLeft"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/footer_bt_left_rotate_bg"
+                        android:onClick="rotateLeft"/>
+                <Button
+                        android:id="@+id/footer_control_btRotateRight"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="2dp"
+                        android:background="@drawable/footer_bt_right_rotate_bg"
+                        android:onClick="rotateRight"/>
+            </LinearLayout>
         </LinearLayout>
-        <LinearLayout android:layout_width="wrap_content"
-                      android:layout_height="wrap_content"
-                      android:layout_gravity="center_horizontal">
-            <Button android:id="@+id/footer_control_btRotateLeft"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/footer_bt_left_rotate_bg"
-                    android:onClick="rotateLeft"/>
-            <Button
-                    android:id="@+id/footer_control_btRotateRight"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="2dp"
-                    android:background="@drawable/footer_bt_right_rotate_bg"
-                    android:onClick="rotateRight"/>
-        </LinearLayout>
+        <Button
+                android:id="@+id/footer_control_btShowRightMenu"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/right_setting_background"
+                android:layout_gravity="center_vertical"/>
+        <Button android:id="@+id/shirt_layout_btnEditAble"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/edit_layer_button_background"
+                android:onClick="changeToEditAble"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="7dp"/>
     </LinearLayout>
-    <Button
-            android:id="@+id/footer_control_btShowRightMenu"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/right_setting_background"
-            android:layout_gravity="center_vertical"/>
-    <Button android:id="@+id/shirt_layout_btnEditAble"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/edit_layer_button_background"
-            android:onClick="changeToEditAble"
-            android:layout_gravity="center_vertical"
-            android:layout_marginLeft="7dp"/>
 </LinearLayout>
