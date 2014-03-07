@@ -14,7 +14,7 @@
                 android:id="@+id/btn_new"
                 android:background="@drawable/bt_new_design_bg"
                 android:layout_centerVertical="true"
-                android:layout_marginLeft="@dimen/edit_basic_info_bar_margin_left"/>
+                android:layout_marginLeft="5dp"/>
         <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -30,7 +30,7 @@
                 android:id="@+id/bt_save"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/bt_save"
+                android:background="@drawable/bt_save_design_bg"
                 android:layout_centerVertical="true"
                 android:layout_toLeftOf="@+id/btn_flow"
                 android:contentDescription="@string/app_name"/>
@@ -38,7 +38,7 @@
                 android:id="@+id/btn_flow"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/bt_more_actions"
+                android:background="@drawable/bt_menu_bg"
                 android:layout_centerVertical="true"
                 android:layout_alignParentRight="true"/>
 
