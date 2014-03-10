@@ -34,5 +34,6 @@
     <string-array name="action_menu">
         <item>Send Email</item>
         <item>Check Out</item>
+        <item>Order Size</item>
     </string-array>
 </resources>

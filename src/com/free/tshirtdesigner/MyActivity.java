@@ -17,6 +17,7 @@ import com.free.tshirtdesigner.action.InputActionListener;
 import com.free.tshirtdesigner.action.TextChangeListener;
 import com.free.tshirtdesigner.adapter.LayerArrayAdapter;
 import com.free.tshirtdesigner.dialog.InputDialog;
+import com.free.tshirtdesigner.dialog.OrderSizeDialog;
 import com.free.tshirtdesigner.model.LayerModel;
 import com.free.tshirtdesigner.popup.Popup;
 import com.free.tshirtdesigner.popup.PopupListener;
@@ -199,12 +200,14 @@ public class MyActivity extends FragmentActivity
                 switch (itemId)
                 {
                     case 0:
-                        // todo : sendEmail
                         sendEmail();
                         break;
                     case 1:
                         Intent intent = new Intent(MyActivity.this, CheckoutActivity.class);
                         startActivityForResult(intent, CHECKOUT_CODE);
+                        break;
+                    case 2:
+                        new OrderSizeDialog().show(getSupportFragmentManager().beginTransaction(), "OrderSizeDialog");
                         break;
                 }
             }
