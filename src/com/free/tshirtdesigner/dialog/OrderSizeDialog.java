@@ -3,10 +3,7 @@ package com.free.tshirtdesigner.dialog;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.view.Window;
+import android.view.*;
 import android.widget.EditText;
 import android.widget.Toast;
 import com.free.tshirtdesigner.R;
@@ -71,28 +68,28 @@ public class OrderSizeDialog extends DialogFragment
                     dismiss();
                     break;
                 case R.id.size_s_decrement:
-                    incrementValue(etSizeSCount);
-                    break;
-                case R.id.size_s_increment:
                     decrementValue(etSizeSCount);
                     break;
-                case R.id.size_m_decrement:
-                    incrementValue(etSizeMCount);
+                case R.id.size_s_increment:
+                    incrementValue(etSizeSCount);
                     break;
-                case R.id.size_m_increment:
+                case R.id.size_m_decrement:
                     decrementValue(etSizeMCount);
                     break;
-                case R.id.size_l_decrement:
-                    incrementValue(etSizeLCount);
+                case R.id.size_m_increment:
+                    incrementValue(etSizeMCount);
                     break;
-                case R.id.size_l_increment:
+                case R.id.size_l_decrement:
                     decrementValue(etSizeLCount);
                     break;
+                case R.id.size_l_increment:
+                    incrementValue(etSizeLCount);
+                    break;
                 case R.id.size_xl_decrement:
-                    incrementValue(etSizeXLCount);
+                    decrementValue(etSizeXLCount);
                     break;
                 case R.id.size_xl_increment:
-                    decrementValue(etSizeXLCount);
+                    incrementValue(etSizeXLCount);
                     break;
             }
         }
@@ -101,7 +98,7 @@ public class OrderSizeDialog extends DialogFragment
     public void incrementValue(EditText etSizeCount)
     {
         int value = Integer.parseInt(etSizeCount.getText().toString());
-        etSizeCount.setText("" + value++);
+        etSizeCount.setText("" + ++value);
     }
 
     public void decrementValue(EditText etSizeCount)
@@ -109,7 +106,7 @@ public class OrderSizeDialog extends DialogFragment
         int value = Integer.parseInt(etSizeCount.getText().toString());
         if (value > 0)
         {
-            etSizeCount.setText("" + value--);
+            etSizeCount.setText("" + --value);
         }
     }
 }
