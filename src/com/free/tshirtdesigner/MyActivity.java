@@ -11,6 +11,7 @@ import android.os.Environment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.View;
 import android.widget.*;
 import com.free.tshirtdesigner.action.InputActionListener;
@@ -121,6 +122,13 @@ public class MyActivity extends FragmentActivity
         if (tShirtFragment != null && isRefresh.length == 0)
         {
             ft.replace(R.id.embed_shirt, tShirtFragment).addToBackStack(null);
+            ft.commit();
+        }
+        else if (isRefresh.length == 1 && isRefresh[0])
+        {
+            createNewFragment(fragmentTag);
+            tShirtFragment.setRetainInstance(true);
+            ft.hide(tShirtFragment);
             ft.commit();
         }
         else
@@ -312,9 +320,11 @@ public class MyActivity extends FragmentActivity
         for (int i = 0; i < 4; i++)
         {
             TShirtFragment.isSave = true;
-            createOrUpdateFragment(i);
+            createOrUpdateFragment(i, true);
         }
-        TShirtFragment.isSave = true;
+        //comeback to older fragment
+        createOrUpdateFragment(0, true);
+        Log.e("@@@", "is Save = false");
         Toast.makeText(getApplicationContext(), "SAVE T SHIRT DONE", Toast.LENGTH_LONG).show();
         progressDialog.dismiss();
     }
@@ -329,7 +339,7 @@ public class MyActivity extends FragmentActivity
         layerModels.clear();
         getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
         setupNewTShirt();
-        createOrUpdateFragment(FRONT_TAG, true);
+        createOrUpdateFragment(FRONT_TAG);
     }
 
     private void showLeftMenu()

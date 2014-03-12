@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.v4.app.Fragment;
@@ -57,11 +58,8 @@ public class TShirtFragment extends Fragment
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
         rlRootLayout = (RelativeLayout) inflater.inflate(R.layout.shirt_layout, container, false);
-        rlRootLayout.setDrawingCacheEnabled(true);
-
-
         ivShirt = (ImageView) rlRootLayout.findViewById(R.id.ivShirt);
-        ivShirt.setImageResource(R.drawable.tshirt_front_500);
+        ivShirt.setImageResource(tShirtDirection);
         ivShirt.setOnTouchListener(new View.OnTouchListener()
         {
             @Override
@@ -116,10 +114,6 @@ public class TShirtFragment extends Fragment
         rlRootLayout.measure(View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED),
                 View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
         rlRootLayout.layout(0, 0, rlRootLayout.getMeasuredWidth(), rlRootLayout.getMeasuredHeight());
-        if (isSave)
-        {
-            saveTShirt(getActivity());
-        }
 
         return rlRootLayout;
     }
@@ -200,14 +194,27 @@ public class TShirtFragment extends Fragment
         }
     }
 
+    @Override
+    public void onPause()
+    {
+        super.onPause();    //To change body of overridden methods use File | Settings | File Templates.
+        Log.e("@@@", "onPause " + sideTag);
+        if (isSave)
+        {
+            saveTShirt(getActivity());
+        }
+    }
+
     public void saveTShirt(Context context)
     {
         ProgressDialog progressDialog = new ProgressDialog(getActivity());
         progressDialog.setMessage("Loading...");
         progressDialog.show();
         Log.e("TAG", "saveTShirt" + sideTag);
-        rlRootLayout.buildDrawingCache();
-        Bitmap bitmap = rlRootLayout.getDrawingCache();
+        Bitmap bitmap = Bitmap.createBitmap(rlRootLayout.getMeasuredWidth(),
+                rlRootLayout.getMeasuredHeight(), Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
+        rlRootLayout.draw(canvas);
         File file, f = null;
         if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED))
         {
