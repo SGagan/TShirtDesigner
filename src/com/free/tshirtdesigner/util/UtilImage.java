@@ -16,6 +16,7 @@ import android.widget.ImageView;
  */
 public class UtilImage
 {
+    // change color tshirt with color define static
     public static Bitmap grayScaleImage(Bitmap src, String colorSource)
     {
         // constant factors
@@ -56,7 +57,7 @@ public class UtilImage
     {
         return ((BitmapDrawable) imageView.getDrawable()).getBitmap();
     }
-
+    //get physical address image
     public static String getRealPathFromURI(Context context, Uri contentURI)
     {
         Cursor cursor = context.getContentResolver().query(contentURI, null, null, null, null);
@@ -68,7 +69,7 @@ public class UtilImage
         int idx = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA);
         return cursor.getString(idx);
     }
-
+    // scale image keep rate with maxWith and maxHeight
     public static Bitmap scaleImage(Bitmap bitmap, float maxWidth, float maxHeight)
     {
         double ratioX = (double)maxWidth / bitmap.getWidth();
@@ -80,5 +81,4 @@ public class UtilImage
 
         return  Bitmap.createScaledBitmap(bitmap, newWidth, newHeight, true);
     }
-
 }

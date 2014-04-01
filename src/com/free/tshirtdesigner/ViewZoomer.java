@@ -29,7 +29,7 @@ public class ViewZoomer extends View
     private VersionedGestureDetector mDetector;
 
     private float mScaleFactor = 1.f;
-
+// create view with text
     public ViewZoomer(Context context, String text, Integer color, String font)
     {
         super(context);
@@ -57,7 +57,7 @@ public class ViewZoomer extends View
 
         mDetector = VersionedGestureDetector.newInstance(context, new GestureCallback());
     }
-
+// create view with image
     public ViewZoomer(Context context, Bitmap bitmap)
     {
         super(context);
@@ -105,13 +105,14 @@ public class ViewZoomer extends View
 
     private class GestureCallback implements VersionedGestureDetector.OnGestureListener
     {
+        // redraw when drag
         public void onDrag(float dx, float dy)
         {
             mPosX += dx;
             mPosY += dy;
             invalidate();
         }
-
+        // redraw when scale
         public void onScale(float scaleFactor)
         {
             mScaleFactor *= scaleFactor;
